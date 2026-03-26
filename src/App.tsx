@@ -142,7 +142,7 @@ const Navbar = () => {
             alt="AutoScale Logo" 
             className="w-10 h-10"
             referrerPolicy="no-referrer"
-            fetchpriority="high"
+            fetchPriority="high"
           />
           <div className="flex flex-col leading-none">
             <span className="text-xl font-bold tracking-tight font-display text-white">AutoScale</span>
