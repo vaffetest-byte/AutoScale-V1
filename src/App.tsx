@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence, useScroll, useTransform, useSpring } from 'motion/react';
+import { motion, AnimatePresence, useScroll, useTransform, useSpring, useMotionValue } from 'motion/react';
 import { 
   Zap, 
   Bot, 
@@ -29,7 +29,6 @@ import {
 import { cn } from './lib/utils';
 import { useInView } from 'react-intersection-observer';
 import { InlineWidget } from 'react-calendly';
-import { useMotionValue, useSpring as useFramerSpring } from 'motion/react';
 
 // --- Components ---
 
@@ -41,8 +40,8 @@ const CustomCursor = () => {
   const [isClicked, setIsClicked] = useState(false);
 
   const springConfig = { damping: 25, stiffness: 150 };
-  const cursorXSpring = useFramerSpring(cursorX, springConfig);
-  const cursorYSpring = useFramerSpring(cursorY, springConfig);
+  const cursorXSpring = useSpring(cursorX, springConfig);
+  const cursorYSpring = useSpring(cursorY, springConfig);
 
   useEffect(() => {
     const moveCursor = (e: MouseEvent) => {
@@ -64,12 +63,14 @@ const CustomCursor = () => {
       setIsVisible(false);
     };
 
+    const handleMouseEnter = () => setIsVisible(true);
+
     window.addEventListener('mousemove', moveCursor);
     window.addEventListener('mouseover', handleMouseOver);
     window.addEventListener('mousedown', handleMouseDown);
     window.addEventListener('mouseup', handleMouseUp);
     document.addEventListener('mouseleave', handleMouseOut);
-    document.addEventListener('mouseenter', () => setIsVisible(true));
+    document.addEventListener('mouseenter', handleMouseEnter);
 
     return () => {
       window.removeEventListener('mousemove', moveCursor);
@@ -77,7 +78,7 @@ const CustomCursor = () => {
       window.removeEventListener('mousedown', handleMouseDown);
       window.removeEventListener('mouseup', handleMouseUp);
       document.removeEventListener('mouseleave', handleMouseOut);
-      document.removeEventListener('mouseenter', () => setIsVisible(true));
+      document.removeEventListener('mouseenter', handleMouseEnter);
     };
   }, [isVisible]);
 
@@ -133,7 +134,7 @@ const Navbar = () => {
   return (
     <nav className={cn(
       "fixed top-0 left-0 right-0 z-50 transition-all duration-300 px-6 py-4",
-      isScrolled ? "bg-black/60 backdrop-blur-md border-b border-white/10" : "bg-transparent"
+      (isScrolled || isMobileMenuOpen) ? "bg-black/60 backdrop-blur-md border-b border-white/10" : "bg-transparent"
     )}>
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         <div className="flex items-center gap-3">
@@ -247,7 +248,7 @@ const TiltCard = ({ children, className }: { children: React.ReactNode, classNam
 };
 
 const StaggeredText = ({ text, className }: { text: string, className?: string }) => {
-  const words = text.split(" ");
+  const words = text.split(/\s+/).filter(Boolean);
   return (
     <div className={cn("flex flex-wrap gap-x-[0.3em]", className)}>
       {words.map((word, i) => (
@@ -742,8 +743,9 @@ const ResultsPreviewSection = () => {
                       <div className="w-full h-1 bg-white/5 rounded-full mt-3 overflow-hidden">
                         <motion.div 
                           initial={{ width: 0 }}
-                          animate={{ width: '75%' }}
-                          transition={{ duration: 2, repeat: Infinity }}
+                          whileInView={{ width: '75%' }}
+                          viewport={{ once: true }}
+                          transition={{ duration: 1.5, ease: "easeOut" }}
                           className="h-full bg-brand-cyan shadow-[0_0_10px_rgba(6,182,212,0.5)]" 
                         />
                       </div>
@@ -754,8 +756,9 @@ const ResultsPreviewSection = () => {
                       <div className="w-full h-1 bg-white/5 rounded-full mt-3 overflow-hidden">
                         <motion.div 
                           initial={{ width: 0 }}
-                          animate={{ width: '90%' }}
-                          transition={{ duration: 2, delay: 0.5, repeat: Infinity }}
+                          whileInView={{ width: '90%' }}
+                          viewport={{ once: true }}
+                          transition={{ duration: 1.5, delay: 0.2, ease: "easeOut" }}
                           className="h-full bg-brand-purple shadow-[0_0_10px_rgba(139,92,246,0.5)]" 
                         />
                       </div>
@@ -766,8 +769,9 @@ const ResultsPreviewSection = () => {
                       <div className="w-full h-1 bg-white/5 rounded-full mt-3 overflow-hidden">
                         <motion.div 
                           initial={{ width: 0 }}
-                          animate={{ width: '85%' }}
-                          transition={{ duration: 2, delay: 1, repeat: Infinity }}
+                          whileInView={{ width: '85%' }}
+                          viewport={{ once: true }}
+                          transition={{ duration: 1.5, delay: 0.4, ease: "easeOut" }}
                           className="h-full bg-brand-blue shadow-[0_0_10px_rgba(59,130,246,0.5)]" 
                         />
                       </div>
@@ -1216,7 +1220,7 @@ const BookingSection = () => {
                 backgroundColor: '030303',
                 hideEventTypeDetails: false,
                 hideLandingPageDetails: false,
-                primaryColor: 'ec1919',
+                primaryColor: '3b82f6',
                 textColor: 'ffffff'
               }}
             />
