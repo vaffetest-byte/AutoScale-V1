@@ -1,0 +1,25 @@
+<svg width="400" height="120" viewBox="0 0 400 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Rounded Hexagon Background with Gradient -->
+  <path d="M50 10C52.5 10 54.5 11.5 56 12.5L86.5 30.5C88.5 31.5 90 33.5 90 36V74C90 76.5 88.5 78.5 86.5 79.5L56 97.5C54.5 98.5 52.5 100 50 100C47.5 100 45.5 98.5 44 97.5L13.5 79.5C11.5 78.5 10 76.5 10 74V36C10 33.5 11.5 31.5 13.5 30.5L44 12.5C45.5 11.5 47.5 10 50 10Z" fill="url(#logoGrad)" />
+  <defs>
+    <linearGradient id="logoGrad" x1="10" y1="10" x2="90" y2="100" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#8b5cf6"/>
+      <stop offset="1" stop-color="#06b6d4"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Bars inside Hexagon -->
+  <rect x="28" y="55" width="8" height="25" rx="2" fill="white" fill-opacity="0.3"/>
+  <rect x="41.5" y="45" width="8" height="35" rx="2" fill="white" fill-opacity="0.5"/>
+  <rect x="55" y="40" width="8" height="40" rx="2" fill="white" fill-opacity="0.7"/>
+
+  <!-- Arrow Line -->
+  <path d="M20 70L35 60L45 65L65 45" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M58 45H65V52" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- Text: Autoscale -->
+  <text x="110" y="65" fill="white" style="font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 52px; letter-spacing: -0.02em;">Autoscale</text>
+  
+  <!-- Text: WORKS -->
+  <text x="112" y="95" fill="white" fill-opacity="0.6" style="font-family: 'Outfit', sans-serif; font-weight: 400; font-size: 32px; letter-spacing: 0.35em;">WORKS</text>
+</svg>
