@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform, useSpring, useMotionValue } from 'motion/react';
+import { BrowserRouter as Router, Routes, Route, Link, useLocation, useNavigate } from 'react-router-dom';
+import Markdown from 'react-markdown';
 import { 
   Zap, 
   Bot, 
@@ -24,7 +26,13 @@ import {
   Instagram,
   Mail,
   MapPin,
-  Phone
+  Phone,
+  Activity,
+  Cpu,
+  Layers,
+  ShieldCheck,
+  Search,
+  LayoutGrid
 } from 'lucide-react';
 import { cn } from './lib/utils';
 import { useInView } from 'react-intersection-observer';
@@ -87,7 +95,7 @@ const CustomCursor = () => {
   return (
     <div className="fixed inset-0 pointer-events-none z-[9999] hidden lg:block">
       <motion.div
-        className="fixed top-0 left-0 w-8 h-8 rounded-full border border-brand-blue/50 mix-blend-difference"
+        className="fixed top-0 left-0 w-8 h-8 rounded-full border border-brand-blue/50"
         style={{
           x: cursorXSpring,
           y: cursorYSpring,
@@ -117,6 +125,10 @@ const CustomCursor = () => {
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const isHome = location.pathname === '/';
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 20);
@@ -124,47 +136,75 @@ const Navbar = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, target: string) => {
+    if (isHome && target.startsWith('#')) {
+      e.preventDefault();
+      const element = document.querySelector(target);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+        setIsMobileMenuOpen(false);
+      }
+    } else if (!isHome && target.startsWith('#')) {
+      e.preventDefault();
+      navigate('/' + target);
+      setIsMobileMenuOpen(false);
+    }
+  };
+
   const navLinks = [
-    { name: 'Services', href: '#services' },
-    { name: 'How it Works', href: '#how-it-works' },
-    { name: 'Results', href: '#results' },
-    { name: 'Testimonials', href: '#testimonials' },
+    { name: 'Systems', href: '#services' },
+    { name: 'Consulting', href: '/services/zoho-crm-consultant', isExternal: true },
+    { name: 'Process', href: '#how-it-works' },
+    { name: 'Blog', href: '/blog/automate-lead-follow-ups-zoho-crm', isExternal: true },
   ];
 
   return (
     <nav className={cn(
-      "fixed top-0 left-0 right-0 z-50 transition-all duration-300 px-6 py-4",
-      (isScrolled || isMobileMenuOpen) ? "bg-black/60 backdrop-blur-md border-b border-white/10" : "bg-transparent"
-    )}>
+      "fixed top-0 left-0 right-0 z-50 transition-all duration-300 px-6 py-3 md:py-4",
+      (isScrolled || isMobileMenuOpen) ? "bg-white/80 backdrop-blur-md border-b border-slate-200/50 shadow-sm" : "bg-transparent"
+    )} contentEditable={false}>
       <div className="max-w-7xl mx-auto flex items-center justify-between">
-        <div className="flex items-center gap-3">
+        <Link to="/" className="flex items-center gap-2 md:gap-3">
           <img 
             src="/logo-icon.svg" 
             alt="AutoScale Logo" 
-            className="w-10 h-10"
+            className="w-8 h-8 md:w-10 md:h-10"
             referrerPolicy="no-referrer"
             fetchPriority="high"
           />
           <div className="flex flex-col leading-none">
-            <span className="text-xl font-bold tracking-tight font-display text-white">AutoScale</span>
-            <span className="text-[10px] font-medium tracking-[0.3em] text-white/50 uppercase">WORKS</span>
+            <span className="text-lg md:text-xl font-bold tracking-tight font-display text-slate-900">AutoScale</span>
+            <span className="text-[9px] md:text-[10px] font-medium tracking-[0.3em] text-slate-400 uppercase">WORKS</span>
           </div>
-        </div>
+        </Link>
 
         {/* Desktop Nav */}
         <div className="hidden md:flex items-center gap-8">
           {navLinks.map((link) => (
-            <a 
-              key={link.name} 
-              href={link.href} 
-              className="text-sm font-medium text-white/70 hover:text-white transition-colors"
-            >
-              {link.name}
-            </a>
+            link.isExternal ? (
+              <Link 
+                key={link.name} 
+                to={link.href} 
+                className="text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                {link.name}
+              </Link>
+            ) : (
+              <a 
+                key={link.name} 
+                href={link.href} 
+                onClick={(e) => handleNavClick(e, link.href)}
+                className="text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors"
+              >
+                {link.name}
+              </a>
+            )
           ))}
           <a 
             href="#booking"
-            className="px-5 py-2.5 bg-white text-black text-sm font-bold rounded-full hover:bg-brand-blue hover:text-white transition-all duration-300"
+            onClick={(e) => handleNavClick(e, '#booking')}
+            className="px-5 py-2.5 bg-slate-900 text-white text-sm font-bold rounded-full hover:bg-brand-blue transition-all duration-300 shadow-sm"
           >
             Get in Touch
           </a>
@@ -172,7 +212,7 @@ const Navbar = () => {
 
         {/* Mobile Toggle */}
         <button 
-          className="md:hidden text-white"
+          className="md:hidden text-slate-900"
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
         >
           {isMobileMenuOpen ? <X /> : <Menu />}
@@ -186,22 +226,33 @@ const Navbar = () => {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            className="absolute top-full left-0 right-0 bg-black/95 backdrop-blur-xl border-b border-white/10 p-6 flex flex-col gap-4 md:hidden"
+            className="absolute top-full left-0 right-0 bg-white/95 backdrop-blur-xl border-b border-slate-200 p-6 flex flex-col gap-4 md:hidden shadow-lg"
           >
             {navLinks.map((link) => (
-              <a 
-                key={link.name} 
-                href={link.href} 
-                className="text-lg font-medium text-white/70"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                {link.name}
-              </a>
+              link.isExternal ? (
+                <Link 
+                  key={link.name} 
+                  to={link.href} 
+                  className="text-lg font-bold text-slate-900"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  {link.name}
+                </Link>
+              ) : (
+                <a 
+                  key={link.name} 
+                  href={link.href} 
+                  className="text-lg font-bold text-slate-900"
+                  onClick={(e) => handleNavClick(e, link.href)}
+                >
+                  {link.name}
+                </a>
+              )
             ))}
             <a 
               href="#booking"
-              className="w-full py-4 bg-white text-black font-bold rounded-xl mt-2 text-center"
-              onClick={() => setIsMobileMenuOpen(false)}
+              onClick={(e) => handleNavClick(e, '#booking')}
+              className="w-full py-4 bg-slate-900 text-white font-bold rounded-xl mt-2 text-center"
             >
               Get in Touch
             </a>
@@ -247,22 +298,30 @@ const TiltCard = ({ children, className }: { children: React.ReactNode, classNam
   );
 };
 
-const StaggeredText = ({ text, className }: { text: string, className?: string }) => {
+const StaggeredText = ({ text, className, as: Component = "div" }: { text: string, className?: string, as?: any }) => {
   const words = text.split(/\s+/).filter(Boolean);
   return (
-    <div className={cn("flex flex-wrap gap-x-[0.3em]", className)}>
-      {words.map((word, i) => (
-        <motion.span
-          key={i}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: i * 0.1 }}
-          className="inline-block"
-        >
-          {word}
-        </motion.span>
-      ))}
-    </div>
+    <Component className={cn("flex flex-wrap gap-x-[0.3em]", className)}>
+      {words.map((word, i) => {
+        const isHighlighted = word.startsWith('*') && word.endsWith('*');
+        const cleanWord = isHighlighted ? word.slice(1, -1) : word;
+        
+        return (
+          <motion.span
+            key={i}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: i * 0.1 }}
+            className={cn(
+              "inline-block", 
+              isHighlighted && "font-serif italic text-brand-blue"
+            )}
+          >
+            {cleanWord}
+          </motion.span>
+        );
+      })}
+    </Component>
   );
 };
 
@@ -296,12 +355,10 @@ const HeroForm = () => {
       } else {
         const errorData = await response.json();
         console.error('Submission error:', errorData);
-        alert('Something went wrong. Please try again or contact us directly.');
         setStatus('idle');
       }
     } catch (err) {
       console.error('Network error:', err);
-      alert('Network error. Please check your connection and try again.');
       setStatus('idle');
     }
   };
@@ -311,103 +368,103 @@ const HeroForm = () => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 1.2 }}
-      className="relative p-1 rounded-3xl bg-gradient-to-br from-white/10 via-white/5 to-transparent border border-white/10 shadow-2xl overflow-hidden group"
+      className="relative p-1 rounded-3xl bg-gradient-to-br from-slate-200/50 via-slate-100/30 to-white border border-slate-200/50 shadow-2xl overflow-hidden group"
     >
       <div className="absolute inset-0 bg-brand-blue/5 blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
       
-      <div className="relative z-10 bg-[#080808]/80 backdrop-blur-xl rounded-[22px] p-8">
-        <h3 className="text-xl font-bold mb-2 flex items-center gap-2">
-          <Zap className="w-5 h-5 text-brand-cyan" />
-          Let's get in touch
+      <div className="relative z-10 bg-white/90 backdrop-blur-xl rounded-[22px] p-8">
+        <h3 className="text-2xl font-black mb-2 flex items-center gap-3 text-slate-900 leading-tight">
+          Let’s build your <br />
+          <span className="text-brand-blue">Efficiency Engine.</span>
         </h3>
-        <p className="text-sm text-white/40 mb-8">Fill out the form below and we'll get back to you within 24 hours.</p>
+        <p className="text-sm text-slate-500 mb-8 font-medium">Get a custom automation roadmap in <span className="text-slate-900">24 hours.</span></p>
         
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-1.5">
-              <label className="text-[10px] font-bold uppercase tracking-widest text-white/30 ml-1">Full Name</label>
+              <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Full Name</label>
               <input 
                 type="text" 
                 required
                 placeholder="John Doe"
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                className="w-full bg-white/5 border border-white/10 rounded-xl py-3 px-4 text-sm focus:outline-none focus:border-brand-blue transition-colors"
+                className="w-full bg-slate-50/50 border border-slate-200 rounded-2xl py-3.5 px-4 text-sm focus:outline-none focus:ring-2 focus:ring-brand-blue/20 focus:border-brand-blue transition-all text-slate-900 placeholder:text-slate-300 shadow-inner"
               />
             </div>
             <div className="space-y-1.5">
-              <label className="text-[10px] font-bold uppercase tracking-widest text-white/30 ml-1">Email Address</label>
+              <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Email Address</label>
               <input 
                 type="email" 
                 required
                 placeholder="john@company.com"
                 value={formData.email}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                className="w-full bg-white/5 border border-white/10 rounded-xl py-3 px-4 text-sm focus:outline-none focus:border-brand-blue transition-colors"
+                className="w-full bg-slate-50/50 border border-slate-200 rounded-2xl py-3.5 px-4 text-sm focus:outline-none focus:ring-2 focus:ring-brand-blue/20 focus:border-brand-blue transition-all text-slate-900 placeholder:text-slate-300 shadow-inner"
               />
             </div>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-1.5">
-              <label className="text-[10px] font-bold uppercase tracking-widest text-white/30 ml-1">Phone Number</label>
+              <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Phone Number</label>
               <input 
                 type="tel" 
                 required
                 placeholder="+1 (555) 000-0000"
                 value={formData.phone}
                 onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                className="w-full bg-white/5 border border-white/10 rounded-xl py-3 px-4 text-sm focus:outline-none focus:border-brand-blue transition-colors"
+                className="w-full bg-slate-50/50 border border-slate-200 rounded-2xl py-3.5 px-4 text-sm focus:outline-none focus:ring-2 focus:ring-brand-blue/20 focus:border-brand-blue transition-all text-slate-900 placeholder:text-slate-300 shadow-inner"
               />
             </div>
             <div className="space-y-1.5">
-              <label className="text-[10px] font-bold uppercase tracking-widest text-white/30 ml-1">Website URL (Optional)</label>
+              <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Company Website</label>
               <input 
                 type="url" 
                 placeholder="https://yourbusiness.com"
                 value={formData.website}
                 onChange={(e) => setFormData({ ...formData, website: e.target.value })}
-                className="w-full bg-white/5 border border-white/10 rounded-xl py-3 px-4 text-sm focus:outline-none focus:border-brand-blue transition-colors"
+                className="w-full bg-slate-50/50 border border-slate-200 rounded-2xl py-3.5 px-4 text-sm focus:outline-none focus:ring-2 focus:ring-brand-blue/20 focus:border-brand-blue transition-all text-slate-900 placeholder:text-slate-300 shadow-inner"
               />
             </div>
           </div>
           
           <div className="space-y-1.5">
-            <label className="text-[10px] font-bold uppercase tracking-widest text-white/30 ml-1">Your Requirements</label>
+            <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Your Requirements</label>
             <textarea 
               required
               placeholder="Tell us about your business and what you'd like to automate..."
               value={formData.requirement}
               onChange={(e) => setFormData({ ...formData, requirement: e.target.value })}
               rows={3}
-              className="w-full bg-white/5 border border-white/10 rounded-xl py-3 px-4 text-sm focus:outline-none focus:border-brand-blue transition-colors resize-none"
+              className="w-full bg-slate-50/50 border border-slate-200 rounded-2xl py-3.5 px-4 text-sm focus:outline-none focus:ring-2 focus:ring-brand-blue/20 focus:border-brand-blue transition-all resize-none text-slate-900 placeholder:text-slate-300 shadow-inner"
             />
           </div>
 
           <button 
             type="submit"
             disabled={status !== 'idle'}
-            className="w-full py-4 bg-gradient-to-r from-brand-blue to-brand-purple text-white font-bold rounded-xl hover:shadow-[0_0_20px_rgba(59,130,246,0.3)] transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+            className="w-full py-5 bg-slate-900 text-white font-black rounded-2xl hover:bg-brand-blue hover:shadow-[0_20px_40px_-10px_rgba(59,130,246,0.3)] transition-all flex items-center justify-center gap-3 disabled:opacity-50"
           >
             {status === 'idle' && (
               <>
-                Get in Touch
-                <ArrowRight className="w-5 h-5" />
+                Generate My Roadmap
+                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </>
             )}
             {status === 'submitting' && (
-              <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+              <div className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin" />
             )}
             {status === 'success' && (
               <>
-                <CheckCircle2 className="w-5 h-5 text-emerald-400" />
-                Audit Request Sent!
+                <CheckCircle2 className="w-6 h-6 text-emerald-400" />
+                Audit Successfully Sent
               </>
             )}
           </button>
         </form>
         
-        <div className="mt-6 flex items-center justify-center gap-6 text-[10px] font-bold text-white/20 uppercase tracking-widest">
+        <div className="mt-6 flex items-center justify-center gap-6 text-[10px] font-bold text-slate-300 uppercase tracking-widest">
           <div className="flex items-center gap-1.5">
             <CheckCircle2 className="w-3 h-3 text-brand-cyan" />
             No Credit Card
@@ -429,6 +486,7 @@ const Hero = () => {
   const [mousePos, setMousePos] = useState({ x: 50, y: 50 });
 
   useEffect(() => {
+    document.title = "AutoScale Works | Expert Zoho CRM Consultant & Business Automation";
     const handleMouseMove = (e: MouseEvent) => {
       setMousePos({
         x: (e.clientX / window.innerWidth) * 100,
@@ -440,40 +498,50 @@ const Hero = () => {
   }, []);
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden px-6">
+    <section className="relative min-h-screen flex items-center justify-center pt-32 pb-24 overflow-hidden px-6 bg-white">
+      {/* Structural Pattern */}
+      <div className="absolute inset-0 z-0 opacity-[0.03] pointer-events-none" 
+           style={{ backgroundImage: 'radial-gradient(#3b82f6 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
+      
       {/* Dynamic Background Glow */}
       <div 
         className="absolute inset-0 z-0 bg-glow transition-all duration-300 pointer-events-none"
         style={{ '--x': `${mousePos.x}%`, '--y': `${mousePos.y}%` } as any}
       />
 
-      <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-16 items-center relative z-10">
+      <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 lg:gap-24 items-center relative z-10">
         <div className="text-left">
           <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-brand-cyan text-[10px] font-bold mb-6 tracking-widest"
+            className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 border border-slate-200 text-brand-blue text-[10px] font-bold mb-6 tracking-widest shadow-sm"
           >
             <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-cyan opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-brand-cyan"></span>
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-blue opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-brand-blue"></span>
             </span>
             NEXT-GEN AUTOMATION FOR MODERN TEAMS
           </motion.div>
           
           <StaggeredText 
-            text="Automate Your Business with AI + CRM" 
-            className="text-5xl md:text-7xl font-bold font-display leading-[1.1] mb-6"
+            as="h1"
+            text="Automated Systems. *Predictable* Growth." 
+            className="text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-semibold font-display leading-[1.1] md:leading-[1.05] mb-8 text-slate-900 tracking-[-0.04em]"
           />
           
-          <motion.p 
+          <motion.div 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.8 }}
-            className="text-lg md:text-xl text-white/60 mb-10 max-w-xl leading-relaxed"
+            className="space-y-6 mb-12 border-l-2 border-brand-blue/30 pl-6"
           >
-            Scale your operations, sales, and customer support without increasing team size. We build the systems that do the work for you.
-          </motion.p>
+            <p className="text-xl md:text-2xl text-slate-900 font-semibold leading-snug max-w-xl">
+              We architect the digital infrastructure that turns manual friction into a scaling force.
+            </p>
+            <p className="text-lg text-slate-600 leading-relaxed max-w-lg">
+              From bespoke Zoho CRM ecosystems to AI-driven workflow optimization, we build the systems that help modern teams scale without the overhead of additional headcount.
+            </p>
+          </motion.div>
           
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
@@ -483,14 +551,14 @@ const Hero = () => {
           >
             <a 
               href="#booking"
-              className="px-8 py-4 bg-gradient-to-r from-brand-blue to-brand-purple text-white font-bold rounded-full hover:shadow-[0_0_30px_rgba(59,130,246,0.5)] transition-all flex items-center justify-center gap-2 group"
+              className="px-10 py-5 bg-slate-900 text-white font-bold rounded-full hover:bg-brand-blue hover:shadow-[0_20px_40px_-10px_rgba(59,130,246,0.5)] transition-all flex items-center justify-center gap-2 group shadow-xl"
             >
-              Get in Touch
+              Start Your Audit
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </a>
             <a 
               href="#how-it-works"
-              className="px-8 py-4 bg-white/5 border border-white/10 text-white font-bold rounded-full hover:bg-white/10 transition-all flex items-center justify-center gap-2"
+              className="px-8 py-4 bg-slate-100 border border-slate-200 text-slate-700 font-bold rounded-full hover:bg-slate-200 transition-all flex items-center justify-center gap-2"
             >
               <Play className="w-4 h-4 fill-current" />
               See How It Works
@@ -498,9 +566,14 @@ const Hero = () => {
           </motion.div>
         </div>
 
-        <div className="relative lg:mt-0 mt-12">
+        <motion.div 
+          initial={{ opacity: 0, x: 40 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.8, delay: 0.5, ease: "easeOut" }}
+          className="relative lg:mt-0 mt-12"
+        >
           <HeroForm />
-        </div>
+        </motion.div>
       </div>
     </section>
   );
@@ -509,59 +582,75 @@ const Hero = () => {
 const ImplementationServices = () => {
   const services = [
     {
-      title: "Strategy & Architecture",
-      desc: "We design the blueprint for your AI ecosystem, ensuring scalability and security from day one.",
-      icon: "🏗️",
-      tags: ["System Design", "Tech Selection", "ROI Mapping"]
+      title: "Data Cleaning",
+      desc: "Turn messy datasets into clear insights. We audit, scrub, and deduplicate your lead data to ensure every decision is based on absolute accuracy.",
+      icon: <Database className="w-6 h-6" />,
+      tags: ["Lead Hygiene", "Data Integrity", "Deduplication"],
+      color: "from-blue-500/10 to-blue-500/20",
+      iconColor: "text-blue-500",
+      cta: "Learn More",
+      href: "#booking"
     },
     {
-      title: "Bespoke Development",
-      desc: "Our engineers build custom AI agents and automation workflows tailored to your specific business logic.",
-      icon: "💻",
-      tags: ["Custom Agents", "API Hooks", "Logic Flow"]
+      title: "CRM Customization",
+      desc: "Tailored pipelines and field logic built around your specific sales process, ensuring your team spends more time closing and less time clicking.",
+      icon: <LayoutGrid className="w-6 h-6" />,
+      tags: ["Custom Pipelines", "User Adoption", "Field Logic"],
+      color: "from-brand-blue/10 to-brand-blue/20",
+      iconColor: "text-brand-blue",
+      cta: "Get Started",
+      href: "#booking"
     },
     {
-      title: "Seamless Integration",
-      desc: "We connect your new AI capabilities with the tools you already use, creating a unified data flow.",
-      icon: "🔗",
-      tags: ["Tool Sync", "Data Pipeline", "Legacy Support"]
+      title: "Workflow Automation",
+      desc: "Eliminate repetitive administrative work. We connect your tools and automate lead follow-ups so no potential customer ever smells a delay.",
+      icon: <Zap className="w-6 h-6" />,
+      tags: ["App Syncing", "Lead Capture", "Auto Follow-ups"],
+      color: "from-brand-cyan/10 to-brand-cyan/20",
+      iconColor: "text-brand-cyan",
+      cta: "Get Started",
+      href: "#booking"
     },
     {
-      title: "Training & Support",
-      desc: "We don't just hand over the keys; we train your team and provide ongoing optimization support.",
-      icon: "🎓",
-      tags: ["Team Onboarding", "Performance Tuning", "24/7 Support"]
+      title: "Custom Solutions",
+      desc: "Unique business logic requires unique tech. We develop flexible solutions based on your specific requirements to fuel your next growth phase.",
+      icon: <Rocket className="w-6 h-6" />,
+      tags: ["Bespoke Builds", "Scalable Tech", "Strategic ROI"],
+      color: "from-brand-purple/10 to-brand-purple/20",
+      iconColor: "text-brand-purple",
+      cta: "Get Started",
+      href: "#booking"
     }
   ];
 
   return (
-    <section className="py-32 bg-[#030303] relative overflow-hidden px-6">
+    <section className="py-32 bg-white relative overflow-hidden px-6">
       <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-20">
+        <div className="text-center mb-24">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-white/5 border border-white/10 mb-6"
+            className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-slate-50 border border-slate-100 mb-6"
           >
-            <div className="w-2 h-2 rounded-full bg-brand-cyan animate-pulse" />
-            <span className="text-[10px] font-bold tracking-[0.3em] text-white/60 uppercase">Beyond Integration</span>
+            <div className="w-2 h-2 rounded-full bg-brand-blue animate-pulse" />
+            <span className="text-[10px] font-bold tracking-[0.3em] text-slate-500 uppercase">Core Offerings</span>
           </motion.div>
           <motion.h2 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
-            className="text-4xl md:text-6xl font-bold font-display mb-6"
+            className="text-4xl md:text-6xl font-semibold font-display mb-8 text-slate-900 tracking-[-0.04em]"
           >
-            Full-Cycle <span className="text-gradient">Implementation.</span>
+            Scale with <span className="font-serif italic text-brand-blue">Strategic</span> Systems.
           </motion.h2>
-          <p className="text-white/40 max-w-2xl mx-auto text-lg">
-            We provide the technical expertise and strategic guidance needed to successfully deploy AI across your entire organization.
+          <p className="text-slate-500 max-w-2xl mx-auto text-lg leading-relaxed">
+            We don't just implement tools; we build the digital infrastructure that empowers your team and automates your success.
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
           {services.map((s, i) => (
             <motion.div
               key={i}
@@ -569,22 +658,36 @@ const ImplementationServices = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.1 }}
-              className="group p-8 rounded-3xl bg-white/[0.02] border border-white/5 hover:bg-white/[0.04] hover:border-white/10 transition-all duration-500 relative overflow-hidden"
+              className="group p-10 rounded-[2.5rem] bg-white border border-slate-100 shadow-[0_4px_25px_-5px_theme(colors.slate.200)] hover:shadow-[0_20px_50px_-15px_theme(colors.slate.300)] hover:border-brand-blue/30 transition-all duration-500 relative flex flex-col h-full"
             >
-              <div className="absolute top-0 right-0 p-8 opacity-[0.03] group-hover:opacity-[0.08] transition-opacity text-6xl pointer-events-none">
+              <div className={cn(
+                "w-14 h-14 rounded-2xl flex items-center justify-center mb-8 transition-transform duration-500 group-hover:scale-110 bg-gradient-to-br",
+                s.color,
+                s.iconColor
+              )}>
                 {s.icon}
               </div>
-              <div className="w-12 h-12 rounded-2xl bg-brand-blue/10 flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform duration-500">
-                {s.icon}
-              </div>
-              <h3 className="text-xl font-bold mb-4 group-hover:text-brand-blue transition-colors">{s.title}</h3>
-              <p className="text-sm text-white/40 leading-relaxed mb-8">{s.desc}</p>
-              <div className="flex flex-wrap gap-2">
-                {s.tags.map((tag, j) => (
-                  <span key={j} className="text-[9px] font-bold tracking-widest text-white/20 uppercase px-2 py-1 rounded-md border border-white/5">
-                    {tag}
-                  </span>
-                ))}
+              <h3 className="text-2xl font-bold mb-4 text-slate-900 group-hover:text-brand-blue transition-colors leading-tight">{s.title}</h3>
+              <p className="text-slate-500 text-sm leading-relaxed mb-8 flex-1">
+                {s.desc}
+              </p>
+              
+              <div className="space-y-4 pt-6 border-t border-slate-50">
+                <div className="flex flex-wrap gap-2">
+                  {s.tags.map((tag, j) => (
+                    <span key={j} className="text-[9px] font-bold tracking-widest text-slate-400 uppercase px-3 py-1.5 rounded-full bg-slate-50 border border-slate-100 group-hover:bg-brand-blue/5 group-hover:text-brand-blue/70 transition-colors">
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+
+                <a 
+                  href={s.href}
+                  className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-brand-blue group-hover:gap-4 transition-all"
+                >
+                  {s.cta}
+                  <ArrowRight className="w-4 h-4" />
+                </a>
               </div>
             </motion.div>
           ))}
@@ -612,35 +715,36 @@ const LogoMarquee = () => {
   ];
 
   return (
-    <div className="py-24 bg-[#030303] relative overflow-hidden">
+    <div className="py-24 bg-slate-50 relative overflow-hidden">
       {/* Editorial Grid Background */}
-      <div className="absolute inset-0 opacity-[0.02] pointer-events-none" 
-           style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)', backgroundSize: '40px 40px' }} />
+      <div className="absolute inset-0 opacity-[0.05] pointer-events-none" 
+           style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, #64748b 1px, transparent 0)', backgroundSize: '40px 40px' }} />
       
       <div className="max-w-7xl mx-auto px-6 mb-16 text-center relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-white/5 border border-white/10 mb-6"
+          className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-slate-100 border border-slate-200 mb-6"
         >
           <div className="w-2 h-2 rounded-full bg-brand-cyan animate-pulse" />
-          <span className="text-[10px] font-bold tracking-[0.3em] text-white/60 uppercase">Ecosystem Connectivity</span>
+          <span className="text-[10px] font-bold tracking-[0.3em] text-slate-500 uppercase">Ecosystem Connectivity</span>
         </motion.div>
         <motion.h2 
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-3xl md:text-5xl font-bold font-display"
+          className="text-3xl md:text-5xl font-semibold font-display text-slate-900 tracking-[-0.04em]"
         >
-          Integrated with your <span className="text-gradient italic">entire stack.</span>
+          Integrated with your <br />
+          <span className="font-serif italic text-brand-blue">entire tech stack.</span>
         </motion.h2>
       </div>
       
       <div className="relative space-y-12">
         {/* Gradient Masks */}
-        <div className="absolute inset-y-0 left-0 w-64 bg-gradient-to-r from-[#030303] via-[#030303]/80 to-transparent z-20 pointer-events-none" />
-        <div className="absolute inset-y-0 right-0 w-64 bg-gradient-to-l from-[#030303] via-[#030303]/80 to-transparent z-20 pointer-events-none" />
+        <div className="absolute inset-y-0 left-0 w-64 bg-gradient-to-r from-slate-50 via-slate-50/80 to-transparent z-20 pointer-events-none" />
+        <div className="absolute inset-y-0 right-0 w-64 bg-gradient-to-l from-slate-50 via-slate-50/80 to-transparent z-20 pointer-events-none" />
         
         {/* Row 1: Left to Right */}
         <div className="flex overflow-hidden">
@@ -649,16 +753,16 @@ const LogoMarquee = () => {
             animate={{ x: ["0%", "-50%"] }}
             transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
           >
-            {[...row1, ...row1].map((logo, i) => (
+            {[...row1, ...row1, ...row1, ...row1].map((logo, i) => (
               <div 
                 key={i} 
                 className="flex items-center gap-4 group/logo cursor-pointer"
               >
                 <div className="relative w-8 h-8">
                   <img 
-                    src={`https://cdn.simpleicons.org/${logo.slug}/white`} 
+                    src={`https://cdn.simpleicons.org/${logo.slug}/64748b`} 
                     alt={logo.name} 
-                    className="absolute inset-0 w-full h-full opacity-20 group-hover/logo:opacity-0 transition-opacity duration-500"
+                    className="absolute inset-0 w-full h-full opacity-40 group-hover/logo:opacity-0 transition-opacity duration-500"
                     referrerPolicy="no-referrer"
                   />
                   <img 
@@ -668,7 +772,7 @@ const LogoMarquee = () => {
                     referrerPolicy="no-referrer"
                   />
                 </div>
-                <span className="text-lg font-bold tracking-tight text-white/10 group-hover/logo:text-white/60 transition-colors duration-500 uppercase">
+                <span className="text-lg font-bold tracking-tight text-slate-200 group-hover/logo:text-slate-400 transition-colors duration-500 uppercase">
                   {logo.name}
                 </span>
               </div>
@@ -683,16 +787,16 @@ const LogoMarquee = () => {
             animate={{ x: ["-50%", "0%"] }}
             transition={{ duration: 50, repeat: Infinity, ease: "linear" }}
           >
-            {[...row2, ...row2].map((logo, i) => (
+            {[...row2, ...row2, ...row2, ...row2].map((logo, i) => (
               <div 
                 key={i} 
                 className="flex items-center gap-4 group/logo cursor-pointer"
               >
                 <div className="relative w-8 h-8">
                   <img 
-                    src={`https://cdn.simpleicons.org/${logo.slug}/white`} 
+                    src={`https://cdn.simpleicons.org/${logo.slug}/64748b`} 
                     alt={logo.name} 
-                    className="absolute inset-0 w-full h-full opacity-20 group-hover/logo:opacity-0 transition-opacity duration-500"
+                    className="absolute inset-0 w-full h-full opacity-40 group-hover/logo:opacity-0 transition-opacity duration-500"
                     referrerPolicy="no-referrer"
                   />
                   <img 
@@ -702,7 +806,7 @@ const LogoMarquee = () => {
                     referrerPolicy="no-referrer"
                   />
                 </div>
-                <span className="text-lg font-bold tracking-tight text-white/10 group-hover/logo:text-white/60 transition-colors duration-500 uppercase">
+                <span className="text-lg font-bold tracking-tight text-slate-200 group-hover/logo:text-slate-400 transition-colors duration-500 uppercase">
                   {logo.name}
                 </span>
               </div>
@@ -714,288 +818,83 @@ const LogoMarquee = () => {
   );
 };
 
-const ResultsPreviewSection = () => {
-  const { scrollYProgress } = useScroll();
-  const scale = useTransform(scrollYProgress, [0, 0.2], [1, 0.95]);
-  const opacity = useTransform(scrollYProgress, [0, 0.2], [1, 0.8]);
-
-  return (
-    <section className="py-12 px-6 relative z-10 -mt-20 lg:block hidden">
-      <div className="max-w-5xl mx-auto">
-        <motion.div style={{ scale, opacity }}>
-          <TiltCard>
-            <div className="relative z-10 glass rounded-3xl p-6 border-white/20 shadow-[0_0_50px_rgba(59,130,246,0.15)]">
-              <div className="bg-[#0a0a0a] rounded-2xl overflow-hidden border border-white/5">
-                <div className="p-4 border-b border-white/5 flex items-center justify-between bg-white/[0.02]">
-                  <div className="flex gap-1.5">
-                    <div className="w-2.5 h-2.5 rounded-full bg-red-500/50" />
-                    <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/50" />
-                    <div className="w-2.5 h-2.5 rounded-full bg-green-500/50" />
-                  </div>
-                  <div className="text-[10px] text-white/30 font-mono tracking-widest uppercase">autoscale-dashboard.v1</div>
-                  <div className="w-12" />
-                </div>
-                <div className="p-8 space-y-8">
-                  <div className="grid grid-cols-3 gap-6">
-                    <div className="p-4 rounded-xl bg-white/5 border border-white/5">
-                      <div className="text-[10px] text-white/40 mb-1 uppercase tracking-widest font-bold">Lead Conversion</div>
-                      <div className="text-2xl font-bold text-brand-cyan">+42%</div>
-                      <div className="w-full h-1 bg-white/5 rounded-full mt-3 overflow-hidden">
-                        <motion.div 
-                          initial={{ width: 0 }}
-                          whileInView={{ width: '75%' }}
-                          viewport={{ once: true }}
-                          transition={{ duration: 1.5, ease: "easeOut" }}
-                          className="h-full bg-brand-cyan shadow-[0_0_10px_rgba(6,182,212,0.5)]" 
-                        />
-                      </div>
-                    </div>
-                    <div className="p-4 rounded-xl bg-white/5 border border-white/5">
-                      <div className="text-[10px] text-white/40 mb-1 uppercase tracking-widest font-bold">Time Saved</div>
-                      <div className="text-2xl font-bold text-brand-purple">120h/mo</div>
-                      <div className="w-full h-1 bg-white/5 rounded-full mt-3 overflow-hidden">
-                        <motion.div 
-                          initial={{ width: 0 }}
-                          whileInView={{ width: '90%' }}
-                          viewport={{ once: true }}
-                          transition={{ duration: 1.5, delay: 0.2, ease: "easeOut" }}
-                          className="h-full bg-brand-purple shadow-[0_0_10px_rgba(139,92,246,0.5)]" 
-                        />
-                      </div>
-                    </div>
-                    <div className="p-4 rounded-xl bg-white/5 border border-white/5">
-                      <div className="text-[10px] text-white/40 mb-1 uppercase tracking-widest font-bold">ROI Increase</div>
-                      <div className="text-2xl font-bold text-brand-blue">3.5x</div>
-                      <div className="w-full h-1 bg-white/5 rounded-full mt-3 overflow-hidden">
-                        <motion.div 
-                          initial={{ width: 0 }}
-                          whileInView={{ width: '85%' }}
-                          viewport={{ once: true }}
-                          transition={{ duration: 1.5, delay: 0.4, ease: "easeOut" }}
-                          className="h-full bg-brand-blue shadow-[0_0_10px_rgba(59,130,246,0.5)]" 
-                        />
-                      </div>
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-2 gap-8">
-                    <div className="space-y-4">
-                      <div className="h-4 w-full rounded bg-white/5" />
-                      <div className="h-4 w-5/6 rounded bg-white/5" />
-                      <div className="h-4 w-4/6 rounded bg-white/5" />
-                      <div className="h-4 w-full rounded bg-white/5" />
-                    </div>
-                    <div className="rounded-2xl bg-gradient-to-br from-brand-blue/10 to-brand-purple/10 border border-white/10 flex flex-col items-center justify-center p-6 text-center">
-                      <Bot className="w-12 h-12 text-brand-blue mb-4 animate-float" />
-                      <div className="text-xs font-bold text-white/60 uppercase tracking-widest">AI Agent Active</div>
-                      <div className="text-[10px] text-white/30 mt-1">Processing 42 leads/min</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </TiltCard>
-        </motion.div>
-      </div>
-    </section>
-  );
-};
-
 const ProblemSection = () => {
   const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.1 });
 
   const problems = [
-    { icon: <Users className="w-6 h-6" />, title: "Losing Leads", desc: "Potential customers slip through the cracks due to slow response times." },
-    { icon: <Clock className="w-6 h-6" />, title: "Manual Follow-ups", desc: "Your team spends hours on repetitive emails instead of closing deals." },
-    { icon: <Database className="w-6 h-6" />, title: "Disorganized Data", desc: "Customer info is scattered across sheets, emails, and sticky notes." },
-    { icon: <Rocket className="w-6 h-6" />, title: "Wasted Potential", desc: "Your business can't scale because your processes are manual and brittle." },
+    { icon: <Users className="w-5 h-5" />, title: "Lead Leakage", desc: "60% of leads go cold because of slow manual follow-ups." },
+    { icon: <Clock className="w-5 h-5" />, title: "Operational Drag", desc: "Repetitive tasks eat 40% of your team's productive hours." },
+    { icon: <Database className="w-5 h-5" />, title: "Siloed Intelligence", desc: "Data scattered across tools creates a blind spot for growth." },
+    { icon: <Rocket className="w-5 h-5" />, title: "Scale Ceiling", desc: "You can't grow because your processes break under pressure." },
   ];
 
   return (
-    <section className="py-24 px-6 bg-[#050505]" ref={ref}>
-      <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-20">
-          <motion.h2 
-            initial={{ opacity: 0, y: 20 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
-            className="text-3xl md:text-5xl font-bold font-display mb-6"
-          >
-            Is your business <span className="text-red-500">leaking revenue?</span>
-          </motion.h2>
-          <motion.p 
-            initial={{ opacity: 0, y: 20 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ delay: 0.1 }}
-            className="text-white/50 text-lg max-w-2xl mx-auto"
-          >
-            Most businesses fail to scale not because of a bad product, but because of inefficient, manual operations.
-          </motion.p>
-        </div>
-
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {problems.map((p, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, y: 30 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ delay: 0.2 + i * 0.1 }}
-              className="p-8 rounded-2xl bg-white/[0.02] border border-white/5 hover:border-red-500/30 transition-all group"
-            >
-              <div className="w-12 h-12 rounded-xl bg-red-500/10 flex items-center justify-center text-red-500 mb-6 group-hover:scale-110 transition-transform">
-                {p.icon}
-              </div>
-              <h3 className="text-xl font-bold mb-3">{p.title}</h3>
-              <p className="text-white/40 text-sm leading-relaxed">{p.desc}</p>
-            </motion.div>
-          ))}
-        </div>
+    <section className="py-32 px-6 relative overflow-hidden bg-slate-900" ref={ref}>
+      {/* Immersive Background */}
+      <div className="absolute inset-0 z-0">
+        <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_20%_30%,rgba(239,68,68,0.1),transparent_50%)]" />
+        <div className="absolute bottom-0 right-0 w-full h-full bg-[radial-gradient(circle_at_80%_70%,rgba(59,130,246,0.05),transparent_50%)]" />
       </div>
-    </section>
-  );
-};
 
-const ServicesSection = () => {
-  const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.1 });
-
-  const services = [
-    {
-      title: "AI Agent as a Service",
-      desc: "Deploy intelligent AI agents for customer support, lead qualification, and 24/7 automation.",
-      icon: <Bot className="w-8 h-8" />,
-      color: "from-blue-500 to-cyan-400",
-      benefits: ["24/7 Availability", "Instant Responses", "Cost Reduction"]
-    },
-    {
-      title: "CRM Implementation",
-      desc: "Custom CRM setup (Zoho, HubSpot, etc.) with optimized sales pipelines and data flow.",
-      icon: <Database className="w-8 h-8" />,
-      color: "from-purple-500 to-pink-500",
-      benefits: ["Centralized Data", "Sales Tracking", "Automated Reporting"]
-    },
-    {
-      title: "Workflow Automation",
-      desc: "Automate lead capture, email follow-ups, and repetitive processes using Zapier and Make.",
-      icon: <Zap className="w-8 h-8" />,
-      color: "from-orange-500 to-yellow-500",
-      benefits: ["Zero Manual Entry", "Error Reduction", "Faster Execution"]
-    },
-    {
-      title: "Data & Analytics",
-      desc: "Centralize your data, build custom dashboards, and provide real-time business insights.",
-      icon: <BarChart3 className="w-8 h-8" />,
-      color: "from-green-500 to-emerald-500",
-      benefits: ["Visual Dashboards", "KPI Tracking", "Data-Driven Decisions"]
-    },
-    {
-      title: "MVP App Creation",
-      desc: "Build rapid MVPs and internal tools to test ideas and automate complex operations.",
-      icon: <Rocket className="w-8 h-8" />,
-      color: "from-brand-blue to-brand-purple",
-      benefits: ["Rapid Prototyping", "Scalable Tech Stack", "Internal Efficiency"]
-    },
-    {
-      title: "Website Creation",
-      desc: "High-converting websites with deep CRM integrations and built-in automation.",
-      icon: <Globe className="w-8 h-8" />,
-      color: "from-brand-cyan to-blue-600",
-      benefits: ["Conversion Focused", "SEO Optimized", "CRM Integrated"]
-    }
-  ];
-
-  return (
-    <section id="services" className="py-32 px-6 relative overflow-hidden" ref={ref}>
-      {/* Parallax Background Elements */}
-      <motion.div 
-        style={{ y: useTransform(useScroll().scrollYProgress, [0, 1], [0, -100]) }}
-        className="absolute top-0 left-0 w-full h-full pointer-events-none z-0 opacity-20"
-      >
-        <div className="absolute top-1/4 left-10 w-64 h-64 bg-brand-blue/10 rounded-full blur-3xl" />
-        <div className="absolute bottom-1/4 right-10 w-96 h-96 bg-brand-purple/10 rounded-full blur-3xl" />
-      </motion.div>
-
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
-      
       <div className="max-w-7xl mx-auto relative z-10">
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-20 gap-6">
-          <div className="max-w-2xl">
+        <div className="grid lg:grid-cols-2 gap-20 items-center">
+          <div>
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               animate={inView ? { opacity: 1, x: 0 } : {}}
-              className="text-brand-blue font-bold text-[10px] tracking-[0.2em] uppercase mb-4"
+              className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-500/10 border border-red-500/20 text-red-500 text-[10px] font-bold mb-6 tracking-widest"
             >
-              Our Expertise
+              <X className="w-3 h-3" />
+              THE COST OF INACTION
             </motion.div>
+            
             <motion.h2 
               initial={{ opacity: 0, y: 20 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
-              className="text-4xl md:text-6xl font-bold font-display"
+              className="text-4xl md:text-6xl font-semibold font-display mb-8 text-white leading-[1.1] tracking-[-0.04em]"
             >
-              Solutions designed to <span className="text-gradient">scale.</span>
+              Is your business <br />
+              <span className="text-red-500 font-serif italic">*leaking* revenue?</span>
             </motion.h2>
-          </div>
-          <motion.p 
-            initial={{ opacity: 0 }}
-            animate={inView ? { opacity: 1 } : {}}
-            className="text-white/40 max-w-sm"
-          >
-            We don't just give you tools; we build the infrastructure for your next phase of growth.
-          </motion.p>
-        </div>
-
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {services.map((s, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, y: 40 }}
+            
+            <motion.p 
+              initial={{ opacity: 0, y: 20 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ delay: i * 0.1, duration: 0.6, ease: "easeOut" }}
+              transition={{ delay: 0.1 }}
+              className="text-white/50 text-xl max-w-xl mb-12 leading-relaxed"
             >
-              <TiltCard className="h-full">
-                <motion.div 
-                  whileHover={{ 
-                    y: -12,
-                    boxShadow: "0 20px 40px -20px rgba(59, 130, 246, 0.5)",
-                  }}
-                  className="group relative h-full p-8 rounded-3xl bg-white/[0.03] border border-white/5 overflow-hidden transition-all hover:bg-white/[0.05]"
-                >
-                  {/* Hover Gradient */}
-                  <div className={cn(
-                    "absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity bg-gradient-to-br",
-                    s.color
-                  )} />
-                  
-                  <div className={cn(
-                    "w-16 h-16 rounded-2xl flex items-center justify-center mb-8 bg-gradient-to-br text-white shadow-lg transform group-hover:scale-110 group-hover:rotate-3 transition-all duration-500",
-                    s.color
-                  )}>
-                    {s.icon}
-                  </div>
-                  
-                  <h3 className="text-2xl font-bold mb-4 group-hover:text-brand-cyan transition-colors font-display">{s.title}</h3>
-                  <p className="text-white/50 text-sm leading-relaxed mb-8">{s.desc}</p>
-                  
-                  <div className="space-y-3">
-                    {s.benefits.map((b, j) => (
-                      <motion.div 
-                        key={j} 
-                        initial={{ opacity: 0, x: -10 }}
-                        animate={inView ? { opacity: 1, x: 0 } : {}}
-                        transition={{ delay: 0.5 + (i * 0.1) + (j * 0.05) }}
-                        className="flex items-center gap-2 text-xs font-medium text-white/70"
-                      >
-                        <CheckCircle2 className="w-4 h-4 text-brand-cyan" />
-                        {b}
-                      </motion.div>
-                    ))}
-                  </div>
+              Most small businesses reach a plateau not because of their product, but because their internal engine is built on manual labor instead of automated logic.
+            </motion.p>
 
-                  <div className="mt-10 pt-6 border-t border-white/5 flex items-center justify-between">
-                    <span className="text-[10px] font-bold tracking-widest uppercase text-white/30">Learn More</span>
-                    <ChevronRight className="w-4 h-4 text-white/30 group-hover:text-white group-hover:translate-x-1 transition-all" />
-                  </div>
-                </motion.div>
-              </TiltCard>
-            </motion.div>
-          ))}
+            <div className="space-y-4">
+               <div className="p-4 rounded-xl bg-white/5 border border-white/10 flex items-center justify-between group cursor-help">
+                  <span className="text-sm font-medium text-white/70">Manual Data Entry Errors</span>
+                  <span className="text-red-500 font-bold tracking-tighter">— High Risk</span>
+               </div>
+               <div className="p-4 rounded-xl bg-white/5 border border-white/10 flex items-center justify-between group cursor-help">
+                  <span className="text-sm font-medium text-white/70">Follow-up Delay (&gt; 24h)</span>
+                  <span className="text-red-500 font-bold tracking-tighter">— 80% Dropoff</span>
+               </div>
+            </div>
+          </div>
+
+          <div className="grid sm:grid-cols-2 gap-6">
+            {problems.map((p, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={inView ? { opacity: 1, scale: 1 } : {}}
+                transition={{ delay: 0.2 + i * 0.1 }}
+                className="p-8 rounded-[2.5rem] bg-white/[0.03] border border-white/10 hover:border-red-500/30 transition-all group backdrop-blur-sm"
+              >
+                <div className="w-10 h-10 rounded-xl bg-red-500/10 flex items-center justify-center text-red-500 mb-6 group-hover:scale-110 transition-transform">
+                  {p.icon}
+                </div>
+                <h3 className="text-lg font-semibold mb-3 text-white tracking-tight">{p.title}</h3>
+                <p className="text-white/40 text-sm leading-relaxed">{p.desc}</p>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </div>
     </section>
@@ -1006,28 +905,28 @@ const HowItWorks = () => {
   const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.1 });
 
   const steps = [
-    { number: "01", title: "Audit Your Business", desc: "We dive deep into your current workflows to identify bottlenecks and automation opportunities." },
-    { number: "02", title: "Build Systems", desc: "Our team develops custom AI agents, CRM integrations, and automated workflows tailored to your needs." },
-    { number: "03", title: "Scale with AI", desc: "Launch your new systems and watch your business scale faster without increasing overhead." },
+    { number: "01", title: "Understand Your Business", desc: "Identify gaps in your sales, CRM, and operations." },
+    { number: "02", title: "Build Your CRM System", desc: "Implement Zoho CRM, automations, and integrations." },
+    { number: "03", title: "Grow with Automation", desc: "Scale your revenue and reclaim your time with a high-performance digital engine." },
   ];
 
   return (
-    <section id="how-it-works" className="py-32 px-6 bg-[#030303] relative" ref={ref}>
+    <section id="how-it-works" className="py-32 px-6 bg-white relative" ref={ref}>
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-24">
           <motion.h2 
             initial={{ opacity: 0, y: 20 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.6 }}
-            className="text-4xl md:text-6xl font-bold font-display mb-6"
+            className="text-4xl md:text-6xl font-semibold font-display mb-6 text-slate-900 tracking-[-0.04em]"
           >
-            The Path to <span className="text-gradient">Efficiency</span>
+            The Path to <span className="font-serif italic text-brand-blue">Efficiency</span>
           </motion.h2>
           <motion.p 
             initial={{ opacity: 0, y: 20 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="text-white/50 max-w-xl mx-auto"
+            className="text-slate-500 max-w-xl mx-auto"
           >
             A proven 3-step process to transform your manual operations into a high-performance engine.
           </motion.p>
@@ -1035,7 +934,7 @@ const HowItWorks = () => {
 
         <div className="relative">
           {/* Connecting Line */}
-          <div className="absolute top-1/2 left-0 right-0 h-px bg-white/5 hidden lg:block -translate-y-1/2" />
+          <div className="absolute top-1/2 left-0 right-0 h-px bg-slate-200 hidden lg:block -translate-y-1/2" />
           
           <div className="grid lg:grid-cols-3 gap-12 relative z-10">
             {steps.map((s, i) => (
@@ -1046,12 +945,12 @@ const HowItWorks = () => {
                 transition={{ delay: i * 0.2 }}
                 className="flex flex-col items-center text-center"
               >
-                <div className="w-20 h-20 rounded-full bg-black border border-white/10 flex items-center justify-center text-3xl font-bold font-display text-brand-blue mb-8 relative group">
+                <div className="w-20 h-20 rounded-full bg-white border border-slate-200 flex items-center justify-center text-3xl font-bold font-display text-brand-blue mb-8 relative group shadow-sm">
                   <div className="absolute inset-0 rounded-full bg-brand-blue/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity" />
                   {s.number}
                 </div>
-                <h3 className="text-2xl font-bold mb-4">{s.title}</h3>
-                <p className="text-white/40 leading-relaxed">{s.desc}</p>
+                <h3 className="text-2xl font-bold mb-4 text-slate-900">{s.title}</h3>
+                <p className="text-slate-500 leading-relaxed">{s.desc}</p>
               </motion.div>
             ))}
           </div>
@@ -1072,9 +971,12 @@ const MetricsSection = () => {
   ];
 
   return (
-    <section id="results" className="py-24 px-6 relative overflow-hidden" ref={ref}>
-      <div className="absolute inset-0 bg-glow opacity-50" />
+    <section id="results" className="py-32 px-6 relative overflow-hidden bg-slate-50" ref={ref}>
+      <div className="absolute inset-0 bg-glow opacity-30" />
       <div className="max-w-7xl mx-auto relative z-10">
+        <div className="text-center mb-16">
+          <h2 className="text-3xl md:text-5xl font-semibold font-display text-slate-900 tracking-[-0.04em]">The AutoScale Impact</h2>
+        </div>
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
           {metrics.map((m, i) => (
             <div key={i} className="text-center">
@@ -1083,15 +985,17 @@ const MetricsSection = () => {
                 animate={inView ? { opacity: 1, y: 0 } : {}}
                 transition={{ delay: i * 0.1 }}
               >
-                <div className="text-brand-cyan mb-4 flex justify-center opacity-50">
-                  {React.cloneElement(m.icon as React.ReactElement, { className: "w-8 h-8" })}
+                <div className="text-brand-blue mb-4 flex justify-center opacity-60">
+                  <div className="w-8 h-8">
+                    {m.icon}
+                  </div>
                 </div>
-                <div className="text-5xl md:text-6xl font-bold font-display mb-2">
+                <div className="text-5xl md:text-6xl font-semibold font-display mb-2 text-slate-900 tracking-[-0.04em]">
                   {inView ? (
                     <Counter value={parseFloat(m.value)} suffix={m.suffix} />
                   ) : "0"}
                 </div>
-                <div className="text-white/40 text-sm font-medium tracking-widest uppercase">{m.label}</div>
+                <div className="text-slate-500 text-sm font-medium tracking-widest uppercase">{m.label}</div>
               </motion.div>
             </div>
           ))}
@@ -1123,7 +1027,7 @@ const Counter = ({ value, suffix }: { value: number, suffix: string }) => {
     return () => clearInterval(timer);
   }, [value]);
 
-  return <span>{count % 1 === 0 ? count : count.toFixed(1)}{suffix}</span>;
+  return <span className="text-slate-900">{count % 1 === 0 ? count : count.toFixed(1)}{suffix}</span>;
 };
 
 const Testimonials = () => {
@@ -1154,11 +1058,11 @@ const Testimonials = () => {
   ];
 
   return (
-    <section id="testimonials" className="py-32 px-6 bg-[#050505]" ref={ref}>
+    <section id="testimonials" className="py-32 px-6 bg-white" ref={ref}>
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-20">
-          <h2 className="text-4xl md:text-6xl font-bold font-display mb-6">What our <span className="text-gradient">partners</span> say</h2>
-          <p className="text-white/50 max-w-xl mx-auto">Real results from businesses that decided to stop doing manual work.</p>
+          <h2 className="text-4xl md:text-6xl font-semibold font-display mb-6 text-slate-900 tracking-[-0.04em]">What our <span className="font-serif italic text-brand-blue">partners</span> say</h2>
+          <p className="text-slate-500 max-w-xl mx-auto">Real results from businesses that decided to stop doing manual work.</p>
         </div>
 
         <div className="grid lg:grid-cols-3 gap-8">
@@ -1168,17 +1072,17 @@ const Testimonials = () => {
               initial={{ opacity: 0, y: 30 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ delay: i * 0.1 }}
-              className="p-10 rounded-3xl glass-dark relative"
+              className="p-10 rounded-3xl glass relative shadow-sm hover:shadow-md transition-shadow"
             >
               <div className="flex items-center gap-1 text-yellow-500 mb-6">
                 {[1,2,3,4,5].map(i => <Star key={i} className="w-4 h-4 fill-current" />)}
               </div>
-              <p className="text-lg text-white/80 italic mb-8 leading-relaxed">"{t.content}"</p>
+              <p className="text-lg text-slate-700 italic mb-8 leading-relaxed">"{t.content}"</p>
               <div className="flex items-center gap-4">
-                <img src={t.avatar} alt={t.name} className="w-12 h-12 rounded-full border border-white/10" referrerPolicy="no-referrer" loading="lazy" />
+                <img src={t.avatar} alt={t.name} className="w-12 h-12 rounded-full border border-slate-200" referrerPolicy="no-referrer" loading="lazy" />
                 <div>
-                  <div className="font-bold">{t.name}</div>
-                  <div className="text-xs text-white/40">{t.role}, {t.company}</div>
+                  <div className="font-bold text-slate-900">{t.name}</div>
+                  <div className="text-xs text-slate-500">{t.role}, {t.company}</div>
                 </div>
               </div>
             </motion.div>
@@ -1193,37 +1097,59 @@ const BookingSection = () => {
   const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.1 });
 
   return (
-    <section id="booking" className="py-32 px-6 relative overflow-hidden" ref={ref}>
-      <div className="absolute inset-0 bg-gradient-to-b from-brand-blue/5 to-brand-purple/5" />
+    <section id="booking" className="py-32 px-6 relative overflow-hidden bg-white" ref={ref}>
+      {/* Soft Ambient Background */}
+      <div className="absolute inset-0 z-0">
+        <div className="absolute top-0 right-0 w-1/2 h-full bg-[radial-gradient(circle_at_80%_20%,rgba(59,130,246,0.05),transparent_50%)]" />
+        <div className="absolute bottom-0 left-0 w-1/2 h-full bg-[radial-gradient(circle_at_20%_80%,rgba(139,92,246,0.05),transparent_50%)]" />
+      </div>
+
       <div className="max-w-5xl mx-auto relative z-10">
         <motion.div 
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={inView ? { opacity: 1, scale: 1 } : {}}
-          className="glass rounded-[40px] p-8 md:p-12 text-center border-white/20 shadow-[0_0_100px_rgba(59,130,246,0.1)]"
+          initial={{ opacity: 0, y: 40 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          className="relative group mt-12"
         >
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-brand-blue/10 text-brand-blue text-xs font-bold mb-8">
-            READY TO SCALE?
-          </div>
-          <h2 className="text-4xl md:text-6xl font-bold font-display mb-8">Let's <span className="text-gradient">get in touch</span></h2>
-          <p className="text-lg text-white/60 mb-12 max-w-2xl mx-auto leading-relaxed">
-            Select a time below to speak with our experts. We'll analyze your business and provide a custom automation roadmap.
-          </p>
+          {/* Decorative Glow */}
+          <div className="absolute -inset-4 bg-gradient-to-br from-brand-blue/10 to-brand-purple/10 rounded-[48px] blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-1000 -z-10" />
           
-          <div className="w-full overflow-hidden rounded-2xl border border-white/10 bg-black/40">
-            <InlineWidget 
-              url="https://calendly.com/victor-autoscale/30min"
-              styles={{
-                height: '700px',
-                minWidth: '320px'
-              }}
-              pageSettings={{
-                backgroundColor: '030303',
-                hideEventTypeDetails: false,
-                hideLandingPageDetails: false,
-                primaryColor: '3b82f6',
-                textColor: 'ffffff'
-              }}
-            />
+          <div className="bg-white rounded-[40px] p-8 md:p-12 text-center border border-slate-100 shadow-[0_32px_64px_-16px_rgba(15,23,42,0.08)] overflow-hidden">
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={inView ? { opacity: 1, y: 0 } : {}}
+              transition={{ delay: 0.2 }}
+            >
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 border border-slate-200 text-brand-blue text-[10px] font-bold mb-6 tracking-widest uppercase">
+                Schedule Your Audit
+              </div>
+              <h2 className="text-4xl md:text-6xl font-semibold font-display mb-6 text-slate-900 tracking-[-0.04em]">
+                Your Journey to <span className="font-serif italic text-brand-blue">Efficiency.</span>
+              </h2>
+              <p className="text-lg text-slate-500 mb-12 max-w-2xl mx-auto leading-relaxed">
+                Experience the AutoScale concierge service. Pick a slot that fits your schedule for a dedicated 1-on-1 automation assessment.
+              </p>
+            </motion.div>
+            
+            <div className="w-full overflow-hidden rounded-2xl bg-white relative">
+              {/* Overlay to mask iframe top edges if needed for a "native" feel */}
+              <div className="absolute top-0 inset-x-0 h-4 bg-white z-10 pointer-events-none" />
+              
+              <InlineWidget 
+                url="https://calendly.com/victor-autoscale/30min"
+                styles={{
+                  height: '750px',
+                  width: '100%',
+                }}
+                pageSettings={{
+                  backgroundColor: 'ffffff',
+                  hideEventTypeDetails: false,
+                  hideLandingPageDetails: false,
+                  primaryColor: '3b82f6',
+                  textColor: '0f172a'
+                }}
+              />
+            </div>
           </div>
         </motion.div>
       </div>
@@ -1237,7 +1163,7 @@ const Footer = () => {
   };
 
   return (
-    <footer className="relative pt-32 pb-12 px-6 border-t border-white/5 bg-[#030303] overflow-hidden">
+    <footer className="relative pt-32 pb-12 px-6 border-t border-slate-200 bg-white overflow-hidden">
       {/* Background Glow */}
       <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-full h-[500px] bg-brand-blue/5 blur-[120px] rounded-full pointer-events-none" />
       
@@ -1254,11 +1180,11 @@ const Footer = () => {
                 loading="lazy"
               />
               <div className="flex flex-col leading-none">
-                <span className="text-2xl font-bold tracking-tight font-display text-white">AutoScale</span>
-                <span className="text-xs font-medium tracking-[0.4em] text-white/50 uppercase">WORKS</span>
+                <span className="text-2xl font-bold tracking-tight font-display text-slate-900">AutoScale</span>
+                <span className="text-xs font-medium tracking-[0.4em] text-slate-400 uppercase">WORKS</span>
               </div>
             </div>
-            <p className="text-white/50 max-w-sm mb-10 leading-relaxed text-sm">
+            <p className="text-slate-500 max-w-sm mb-10 leading-relaxed text-sm">
               Pioneering the future of business operations through intelligent automation and bespoke AI ecosystems. We don't just build tools; we build competitive advantages.
             </p>
             <div className="flex flex-col gap-6">
@@ -1271,19 +1197,19 @@ const Footer = () => {
                   <a 
                     key={i} 
                     href="#" 
-                    className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center hover:bg-brand-blue hover:border-brand-blue hover:text-white group transition-all duration-300"
+                    className="w-10 h-10 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-center hover:bg-brand-blue hover:border-brand-blue hover:text-white group transition-all duration-300 shadow-sm"
                     aria-label={s.label}
                   >
-                    <s.icon className="w-4 h-4 text-white/40 group-hover:text-white transition-colors" />
+                    <s.icon className="w-4 h-4 text-slate-400 group-hover:text-white transition-colors" />
                   </a>
                 ))}
               </div>
               <div className="flex flex-col gap-3">
-                <div className="flex items-center gap-3 text-xs text-white/40 hover:text-brand-blue transition-colors cursor-pointer group">
+                <div className="flex items-center gap-3 text-xs text-slate-400 hover:text-brand-blue transition-colors cursor-pointer group">
                   <Mail className="w-3.5 h-3.5 text-brand-blue group-hover:scale-110 transition-transform" />
-                  <span>hello@autoscale.works</span>
+                  <span>Victor@autoscale.works</span>
                 </div>
-                <div className="flex items-center gap-3 text-xs text-white/40">
+                <div className="flex items-center gap-3 text-xs text-slate-400">
                   <MapPin className="w-3.5 h-3.5 text-brand-blue" />
                   <span>London • San Francisco • Remote</span>
                 </div>
@@ -1293,32 +1219,32 @@ const Footer = () => {
           
           {/* Links Columns */}
           <div className="lg:col-span-2">
-            <h4 className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/30 mb-8">Solutions</h4>
-            <ul className="space-y-4 text-sm text-white/50">
-              <li><a href="#services" className="hover:text-white hover:translate-x-1 inline-block transition-all">AI Automation</a></li>
-              <li><a href="#services" className="hover:text-white hover:translate-x-1 inline-block transition-all">CRM Systems</a></li>
-              <li><a href="#services" className="hover:text-white hover:translate-x-1 inline-block transition-all">Data Analytics</a></li>
-              <li><a href="#services" className="hover:text-white hover:translate-x-1 inline-block transition-all">Custom AI Agents</a></li>
+            <h4 className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 mb-8">Solutions</h4>
+            <ul className="space-y-4 text-sm text-slate-500">
+              <li><Link to="/services/zoho-crm-consultant" className="hover:text-slate-900 hover:translate-x-1 inline-block transition-all font-medium">Zoho Consultant</Link></li>
+              <li><a href="/#services" className="hover:text-slate-900 hover:translate-x-1 inline-block transition-all font-medium">CRM Systems</a></li>
+              <li><a href="/#services" className="hover:text-slate-900 hover:translate-x-1 inline-block transition-all font-medium">Data Analytics</a></li>
+              <li><a href="/#services" className="hover:text-slate-900 hover:translate-x-1 inline-block transition-all font-medium">Custom AI Agents</a></li>
             </ul>
           </div>
 
           <div className="lg:col-span-2">
-            <h4 className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/30 mb-8">Resources</h4>
-            <ul className="space-y-4 text-sm text-white/50">
-              <li><a href="#" className="hover:text-white hover:translate-x-1 inline-block transition-all">Case Studies</a></li>
-              <li><a href="#" className="hover:text-white hover:translate-x-1 inline-block transition-all">AI Insights</a></li>
-              <li><a href="#" className="hover:text-white hover:translate-x-1 inline-block transition-all">Documentation</a></li>
-              <li><a href="#" className="hover:text-white hover:translate-x-1 inline-block transition-all">API Status</a></li>
+            <h4 className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 mb-8">Resources</h4>
+            <ul className="space-y-4 text-sm text-slate-500">
+              <li><Link to="/blog/automate-lead-follow-ups-zoho-crm" className="hover:text-slate-900 hover:translate-x-1 inline-block transition-all font-medium">Automation Guide</Link></li>
+              <li><a href="/#services" className="hover:text-slate-900 hover:translate-x-1 inline-block transition-all font-medium">AI Insights</a></li>
+              <li><a href="/#services" className="hover:text-slate-900 hover:translate-x-1 inline-block transition-all font-medium">Documentation</a></li>
+              <li><a href="/#services" className="hover:text-slate-900 hover:translate-x-1 inline-block transition-all font-medium">API Status</a></li>
             </ul>
           </div>
 
           <div className="lg:col-span-2">
             <h4 className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/30 mb-8">Company</h4>
             <ul className="space-y-4 text-sm text-white/50">
-              <li><a href="#" className="hover:text-white hover:translate-x-1 inline-block transition-all">About Us</a></li>
-              <li><a href="#how-it-works" className="hover:text-white hover:translate-x-1 inline-block transition-all">Our Process</a></li>
-              <li><a href="#" className="hover:text-white hover:translate-x-1 inline-block transition-all">Careers</a></li>
-              <li><a href="#booking" className="hover:text-white hover:translate-x-1 inline-block transition-all">Contact</a></li>
+              <li><a href="/" className="hover:text-white hover:translate-x-1 inline-block transition-all">About Us</a></li>
+              <li><a href="/#how-it-works" className="hover:text-white hover:translate-x-1 inline-block transition-all">Our Process</a></li>
+              <li><a href="/#testimonials" className="hover:text-white hover:translate-x-1 inline-block transition-all">Success Stories</a></li>
+              <li><a href="/#booking" className="hover:text-white hover:translate-x-1 inline-block transition-all">Contact</a></li>
             </ul>
           </div>
 
@@ -1357,7 +1283,294 @@ const Footer = () => {
   );
 };
 
+const ServicePage = () => {
+  useEffect(() => {
+    document.title = "Zoho CRM Consultant for Small Business | AutoScale Works";
+    const metaDesc = document.querySelector('meta[name="description"]');
+    if (metaDesc) metaDesc.setAttribute("content", "Stop the data chaos. Hire an expert Zoho CRM consultant for small business growth. Automate workflows, sync data, and scale your revenue today.");
+    window.scrollTo(0, 0);
+  }, []);
+
+  return (
+    <div className="pt-32 pb-24 px-6 bg-white">
+      <div className="max-w-4xl mx-auto">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="prose prose-slate prose-blue max-w-none"
+        >
+          <h1 className="text-4xl md:text-6xl font-semibold font-display mb-8 text-slate-900 tracking-[-0.04em]">Expert Zoho CRM Consultant for <span className="font-serif italic text-brand-blue">Small Business Growth</span></h1>
+          
+          <p className="text-xl text-slate-700 leading-relaxed mb-6">
+            Is your CRM working for you, or are you working for your CRM? For many growing companies, Zoho CRM starts as a promise of organization but quickly turns into a source of "data chaos." If your team is still manually entering leads, struggling to find customer history, or missing follow-ups because of a messy setup, you don't have a software problem—you have a process problem. At AutoScale Works, we specialize in bridging the gap between powerful software and efficient business operations.
+          </p>
+
+          <p className="text-lg text-slate-500 leading-relaxed mb-12">
+            Most small businesses reach a breaking point between 5 and 50 employees. The spreadsheets that served you well in the early days become liabilities. The "memory-based" follow-up system starts to fail, and revenue begins to leak through the cracks of a disorganized pipeline. Our mission is to plug those leaks and build a digital engine that powers your next phase of growth without adding to your administrative burden.
+          </p>
+
+          <h2 className="text-2xl font-bold mt-12 mb-6 text-slate-900">Why Zoho CRM for Your Small Business?</h2>
+          <p>
+            Zoho CRM is one of the most powerful and flexible platforms on the market, but that flexibility is a double-edged sword. Without a professional architect, it’s easy to build a system that is too complex for your team to use or too rigid to adapt to your changing needs. As your Zoho CRM consultant, we focus on three pillars: <strong>scalability, usability, and automation.</strong>
+          </p>
+          <p>
+            We don't just "install" Zoho; we architect a solution that mirrors your unique sales process. Whether you're in professional services, manufacturing, or tech, your Zoho environment should feel like a custom-built tool designed specifically for your team's workflow.
+          </p>
+
+          <h2 className="text-2xl font-bold mt-12 mb-6 text-slate-900">The Benefits of Professional Optimization</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 my-12 not-prose">
+            {[
+              { title: "Single Source of Truth", desc: "No more hunting through emails or scattered docs. Centralize every interaction for a 360-degree view of your customer journey." },
+              { title: "Automated Sales Pipelines", desc: "Let the software handle the heavy lifting with automated lead scoring, task assignments, and follow-up triggers." },
+              { title: "Seamless App Integration", desc: "Eliminate double data entry. We connect Zoho with QuickBooks, Slack, Mailchimp, and your custom internal tools." },
+              { title: "Actionable Intelligence", desc: "Stop guessing. Custom dashboards provide real-time visibility into your sales velocity, conversion rates, and team performance." }
+            ].map((b, i) => (
+              <div key={i} className="p-6 rounded-2xl bg-slate-50 border border-slate-100 hover:border-brand-blue/30 transition-colors shadow-sm">
+                <h3 className="text-lg font-bold mb-2 text-brand-blue">{b.title}</h3>
+                <p className="text-sm text-slate-600 font-sans">{b.desc}</p>
+              </div>
+            ))}
+          </div>
+
+          <h2 className="text-2xl font-bold mt-12 mb-6 text-slate-900">Our 4-Step "Scale-Ready" Process</h2>
+          <div className="space-y-12 my-12 not-prose">
+            {[
+              { 
+                step: "01", 
+                title: "The Deep-Dive Audit", 
+                desc: "We don't start with code; we start with conversations. We spend time understanding your sales cycle, your team's pain points, and your long-term goals. This audit identifies immediate 'low-hanging fruit' for automation and uncovers the structural flaws causing your current data chaos." 
+              },
+              { 
+                step: "02", 
+                title: "Custom Architecture & Build", 
+                desc: "Using the insights from our audit, we design a custom Zoho environment. This includes configuring modules, setting up Blueprint sales processes, and creating custom fields that actually matter. We focus on a 'clean' UI so your sales reps spend less time clicking and more time selling." 
+              },
+              { 
+                step: "03", 
+                title: "Integration & Data Migration", 
+                desc: "Data is the lifeblood of your business. We handle the technical heavy lifting of migrating your legacy data into Zoho and setting up two-way syncs with your accounting, marketing, and communication tools. We ensure your data flow is unified and error-free." 
+              },
+              { 
+                step: "04", 
+                title: "Team Onboarding & Ongoing Support", 
+                desc: "The best system in the world is useless if your team won't use it. We provide recorded training sessions tailored to your specific setup and documentation for your 'Standard Operating Procedures'. We also offer ongoing optimization as your business evolves." 
+              }
+            ].map((s, i) => (
+              <div key={i} className="flex gap-8 group">
+                <span className="text-5xl font-bold text-slate-100 font-display group-hover:text-brand-blue/10 transition-colors shrink-0">{s.step}</span>
+                <div className="pt-2">
+                  <h3 className="text-xl font-bold mb-3 text-slate-900">{s.title}</h3>
+                  <p className="text-slate-500 leading-relaxed font-sans">{s.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <h2 className="text-2xl font-bold mt-12 mb-6 text-slate-900">The ROI of Zoho Automation</h2>
+          <p>
+            When you automate your CRM, you aren't just saving time—you're increasing your capacity to generate revenue. Our clients typically see a 20-30% increase in lead conversion rates simply because no lead is ever 'forgotten.' Moreover, by automating administrative tasks, your sales team can handle a higher volume of prospects without needing to hire additional staff. 
+          </p>
+          <p>
+            Think about the cost of a missed follow-up on a $5,000 contract. Now multiply that by the number of times it happens in a year. The investment in professional Zoho consulting pays for itself many times over by ensuring every opportunity is nurtured to its full potential.
+          </p>
+
+          <h2 className="text-2xl font-bold mt-12 mb-6 text-slate-900">Frequently Asked Questions</h2>
+          <div className="space-y-6 my-12 not-prose">
+            {[
+              { q: "Why hire a Zoho consultant instead of doing it myself?", a: "While Zoho is user-friendly, setting up complex automations and integrations requires technical expertise. A consultant avoids common pitfalls, prevents 'data debt', and ensures your system is built for long-term scalability." },
+              { q: "How long does a typical implementation take?", a: "Depending on complexity, a standard optimization project takes between 4 to 8 weeks. This includes audit, build, migration, and training." },
+              { q: "Can you integrate with my existing QuickBooks or Xero?", a: "Absolutely. One of our specialties is creating a seamless link between your sales and accounting teams to ensure accuracy and speed up invoicing." },
+              { q: "Is Zoho too complex for a team of 5?", a: "It's all about how it's configured. We can strip back the interface to show only what your team needs, making it easier to use than a basic spreadsheet while providing much better data." },
+              { q: "What kind of ongoing support do you provide?", a: "We offer various support tiers, from ad-hoc troubleshooting to monthly optimization retainers where we continuously refine your automations as you grow." }
+            ].map((f, i) => (
+              <div key={i} className="p-6 rounded-2xl bg-slate-50 border border-slate-200 hover:border-brand-purple/30 transition-colors">
+                <h4 className="font-bold mb-2 text-slate-900 font-display">Q: {f.q}</h4>
+                <p className="text-slate-500 text-sm font-sans leading-relaxed">A: {f.a}</p>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-24 p-12 rounded-[40px] bg-gradient-to-br from-brand-blue/5 to-brand-purple/5 border border-slate-200/50 text-center not-prose overflow-hidden relative shadow-xl">
+            <div className="absolute top-0 right-0 w-64 h-64 bg-brand-blue/5 blur-3xl -mr-32 -mt-32" />
+            <div className="relative z-10">
+              <h2 className="text-3xl md:text-5xl font-semibold mb-6 font-display text-slate-900 tracking-[-0.04em]">Ready to Stop the Data Chaos?</h2>
+              <p className="text-slate-500 mb-10 max-w-xl mx-auto">
+                Join dozens of small businesses that have scaled their revenue by automating their workflows. Your free audit is just a click away.
+              </p>
+              <a href="/#booking" className="inline-block px-10 py-5 bg-brand-blue text-white font-bold rounded-full hover:shadow-[0_0_40px_rgba(59,130,246,0.3)] transition-all transform hover:scale-105">
+                Book a Free Automation Audit
+              </a>
+            </div>
+          </div>
+        </motion.div>
+      </div>
+    </div>
+  );
+};
+
+const BlogPage = () => {
+  useEffect(() => {
+    document.title = "How to Automate Lead Follow-Ups in Zoho CRM | AutoScale Works";
+    const metaDesc = document.querySelector('meta[name="description"]');
+    if (metaDesc) metaDesc.setAttribute("content", "Learn how to automate lead follow-ups in Zoho CRM with our step-by-step guide. Stop losing leads and start scaling your small business today.");
+    window.scrollTo(0, 0);
+  }, []);
+
+  const markdown = `
+# How to Automate Lead Follow-Ups in Zoho CRM (Step-by-Step Guide)
+
+You just spent $500 on a Google Ads campaign. A high-quality lead lands in your inbox at 2:00 PM on a Tuesday. You’re in a meeting. By the time you see the notification at 4:30 PM, you’re exhausted and decide to "handle it first thing tomorrow." 
+
+Tomorrow comes. A fire breaks out in operations. You finally send that follow-up email at 11:00 AM on Wednesday. 
+
+The result? Silence. Your prospect has already booked a call with a competitor who replied within five minutes. 
+
+This is the reality of "lead leakage." In a world where the first responder wins the business 78% of the time, manual follow-ups are no longer a viable strategy for growth. If you want to scale, you must **automate lead follow-ups in Zoho CRM**.
+
+## The Hidden Costs of Manual Lead Management
+
+Many small business owners pride themselves on their "personal touch." They believe that manually typing every email shows they care. However, what feels like personal service is actually a bottleneck. When you're busy, the follow-up delays. When you're tired, the nuance is lost. When you're out of the office, the connection dies.
+
+The cost of manual lead management isn't just the time spent—it's the lost opportunity value. For every lead that falls through the cracks, you aren't just losing a sale; you're increasing your customer acquisition cost (CAC) and letting your marketing budget go to waste. Automation ensures that your "personal touch" happens consistently, 24/7, without you ever having to lift a finger.
+
+## Why Manual Follow-Ups Kill Your Sales
+
+If you're still relying on memory or sticky notes to follow up with leads, you're essentially gambling with your commissions. Here’s why manual systems fail:
+
+1.  **The "Speed to Lead" Gap:** Research from the Harvard Business Review shows that companies that try to contact potential customers within an hour of receiving a query are nearly 7 times as likely to have a meaningful conversation with a key decision-maker than those who wait even an extra hour—and more than 60 times as likely as those who waited 24 hours or longer.
+2.  **Lack of Persistence:** Most sales are made on the 5th to 12th contact. Yet, 48% of sales people never even make a single follow-up attempt. Automation removes the psychological barrier of "bothering" people and ensures the follow-up happens until they are ready to buy or explicitly opt-out.
+3.  **Inconsistency in Branding:** Your mood affects your writing. One day you're professional, the next you're hurried. Automation ensures that every prospect receives your "best" introductory message, carefully crafted to convert, regardless of how your day is going.
+4.  **Scaling Friction:** You can't double your business if your processes require linear human effort. If you handle 10 leads a day manually, you can't handle 100 tomorrow. Automation creates a non-linear path to growth.
+
+## What Zoho CRM Automation Can Do
+
+Zoho CRM is more than a digital Rolodex; it is a powerful automation engine. When properly configured, it can handle:
+
+*   **Instant Auto-Responders:** Send a personalized "Next Steps" email the second a form is submitted on your website.
+*   **Intelligent Drip Sequences:** Nurture leads with educational content over 30 days based on their expressed interests and industry.
+*   **Dynamic Task Assignment:** Automatically assign a lead to the best sales rep based on territory, product interest, or current rep workload.
+*   **Slack/SMS Alerts:** Notify your team instantly on their mobile devices when a high-value lead interacts with your site or opens a high-value proposal.
+*   **SalesSignals:** Real-time notifications when a prospect interacts with your brand across any channel—email, social media, or your website.
+
+## Step-by-Step: Setting Up Automated Follow-Ups in Zoho
+
+Here is the exact blueprint we use to set up lead automation for our small business clients.
+
+### Step 1: Define Your Trigger
+In Zoho CRM, navigate to **Setup > Automation > Workflow Rules**. Click **+ Create Rule**. Select the **Leads** module and choose **"On a Record Action"**. Set this to **"Create"**. This ensures that the moment a lead enters the system—whether via webform, manual entry, or API—the automation engine kicks in.
+
+### Step 2: Set Your Conditions
+Don't use a "one size fits all" approach. Set your condition to filter by **Lead Source** (e.g., "Web Form") or **Product Interest**. This allows you to send a different first email to someone interested in "Consulting" than you would to someone interested in "Software Training." Relevance is the key to conversion.
+
+### Step 3: Create Immediate Actions
+Under **Instant Actions**, select **Email Notification**. You should have a pre-created template that use "Merge Tags" to pull in the prospect's First Name. The goal of this first email is simple: *Acknowledge the request, provide immediate value (like a link to a guide), and set expectations for when they will hear from a human.*
+
+### Step 4: Set Scheduled Actions (The Nurture Trail)
+This is where you build the relationship. Click **Scheduled Actions**. We recommend the following cadence for small businesses:
+*   **Day 1:** Educational content related to their interest (a case study or "How-To" guide).
+*   **Day 4:** The "Social Proof" email (a video testimonial or a list of logos of companies you've helped).
+*   **Day 10:** The "Low Friction" offer (e.g., "Do you have 5 minutes for a quick audit next week?").
+*   **Day 20:** The "Helpful Resource" (something non-salesy that solves a minor problem for them).
+These emails should feel helpful and consultative, shifting the perception of you from a "vendor" to a "partner."
+
+### Step 5: Implement the Internal Safety Net
+Under your Day 1 scheduled action, add a **Task** assigned to the record owner: "Phone Call Follow-Up." Automation handles the email persistence, but for high-ticket B2B sales, a human phone call is still vital. The Task ensures that your sales reps are alerted to take action at the most opportune moment.
+
+## Advanced Strategies: Lead Scoring for Priority
+
+Not all leads are created equal. Giving a 'cold' inquiry the same attention as a 'hot' prospect is a waste of resources. In Zoho, you can set up **Scoring Rules**. 
+*   Give a lead **+10 points** if they open your 'Case Study' email.
+*   Give a lead **+50 points** if they visit your 'Pricing' page more than twice.
+*   Subtract **-20 points** if they haven't interacted with your emails in 14 days.
+When a lead reaches a score of 100, trigger an immediate internal notification to your sales team to call them *now*. This ensures your reps spend their limited hours on the prospects most likely to close.
+
+## Common Mistakes to Avoid
+
+1.  **The "Robot" Tone:** If your emails sound like they were written by a machine, people will ignore them. Use plain text templates instead of heavy HTML designs. They look like a real email from a real person and have much higher open rates.
+2.  **Ignoring the "Stop" Trigger:** There is nothing more annoying than receiving an automated "Why haven't you replied?" email *after* you've already had a great discovery call. Use "Conditions" in your workflow to stop the process if the Lead Status changes from "New" to "Contacted."
+3.  **No Clear Call to Action (CTA):** Every automated email should have ONE clear call to action. Don't ask them to download a PDF, watch a video, AND book a call in one email. Give them one simple, low-friction next step.
+4.  **Bad Data Entry:** If you don't use "Validation Rules" in Zoho, you'll end up with emails addressed to "Dear [First Name]". Professionalism starts with clean data.
+
+## When to Hire a Zoho Consultant
+
+While setting up a basic workflow is something most tech-savvy owners can do, building a scalable ecosystem is a different challenge. You should consider looking to **hire a Zoho consultant** when:
+*   You need **"Deluge" Scripting** for complex logic, such as updating prices across different modules or syncing data with third-party ERPs.
+*   You have **"Duplicate Record"** issues that are confusing your sales team.
+*   You're spending more time troubleshooting Zoho glitches than you are selling or running your business.
+*   You want to integrate Zoho with advanced AI agents for lead qualification.
+
+## Conclusion: Stop the Leakage
+
+Automation isn't about removing human connection; it’s about making sure that connection happens at the right time with the right information. By automating the repetitive "chase," you free up your team to do what they do best: solve customer problems and close deals.
+
+**Ready to see how much time and revenue you could be saving?** We specialize in helping small businesses with 5-50 employees transition from "manual chaos" to "automated precision." 
+
+[Book a Free 30-Minute Automation Audit at autoscale.works](/#booking)
+  `;
+
+  return (
+    <div className="pt-32 pb-24 px-6 bg-white">
+      <div className="max-w-3xl mx-auto">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="prose prose-slate prose-blue max-w-none"
+        >
+          <Markdown>{markdown}</Markdown>
+        </motion.div>
+        
+        <div className="mt-24 p-12 rounded-[40px] bg-slate-50 border border-slate-200 text-center relative overflow-hidden shadow-xl">
+          <div className="absolute inset-0 bg-brand-purple/5 blur-3xl" />
+          <div className="relative z-10">
+            <h3 className="text-2xl md:text-4xl font-semibold mb-6 font-display text-slate-900 tracking-[-0.04em]">Want to implement this for your business?</h3>
+            <p className="text-slate-500 mb-8 max-w-lg mx-auto italic">
+              "We stopped losing leads overnight. The automated follow-up system AutoScale built for us became our highest-converting sales channel within two months." — Sarah C., CEO
+            </p>
+            <a href="/#booking" className="inline-block px-10 py-5 bg-gradient-to-r from-brand-blue to-brand-purple text-white font-bold rounded-full hover:shadow-[0_0_40px_rgba(59,130,246,0.3)] transition-all transform hover:scale-105">
+              Book a Free Strategy Call
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 // --- Main App ---
+
+const MainContent = () => {
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.hash) {
+      const element = document.querySelector(location.hash);
+      if (element) {
+        setTimeout(() => {
+          const offset = 80;
+          const elementPosition = element.getBoundingClientRect().top;
+          const offsetPosition = elementPosition + window.pageYOffset - offset;
+          window.scrollTo({
+            top: offsetPosition,
+            behavior: 'smooth'
+          });
+        }, 100);
+      }
+    }
+  }, [location]);
+
+  return (
+    <>
+      <Hero />
+      <ProblemSection />
+      <ImplementationServices />
+      <LogoMarquee />
+      <HowItWorks />
+      <BookingSection />
+      <MetricsSection />
+      <Testimonials />
+    </>
+  );
+};
 
 export default function App() {
   const { scrollYProgress } = useScroll();
@@ -1368,33 +1581,30 @@ export default function App() {
   });
 
   return (
-    <div className="relative selection:bg-brand-blue/30 selection:text-white lg:cursor-none">
-      <CustomCursor />
-      {/* Scroll Progress Bar */}
-      <motion.div 
-        className="fixed top-0 left-0 right-0 h-1 bg-gradient-to-r from-brand-blue via-brand-purple to-brand-cyan z-[60] origin-left"
-        style={{ scaleX }}
-      />
+    <Router>
+      <div className="relative selection:bg-brand-blue/20 selection:text-slate-900 lg:cursor-none">
+        <CustomCursor />
+        {/* Scroll Progress Bar */}
+        <motion.div 
+          className="fixed top-0 left-0 right-0 h-1 bg-gradient-to-r from-brand-blue via-brand-purple to-brand-cyan z-[60] origin-left"
+          style={{ scaleX }}
+        />
 
-      <Navbar />
-      
-      <main>
-        <Hero />
-        <ResultsPreviewSection />
-        <LogoMarquee />
-        <ImplementationServices />
-        <ProblemSection />
-        <ServicesSection />
-        <HowItWorks />
-        <MetricsSection />
-        <Testimonials />
-        <BookingSection />
-      </main>
+        <Navbar />
+        
+        <main>
+          <Routes>
+            <Route path="/" element={<MainContent />} />
+            <Route path="/services/zoho-crm-consultant" element={<ServicePage />} />
+            <Route path="/blog/automate-lead-follow-ups-zoho-crm" element={<BlogPage />} />
+          </Routes>
+        </main>
 
-      <Footer />
+        <Footer />
 
-      {/* Background Noise/Texture */}
-      <div className="fixed inset-0 pointer-events-none opacity-[0.03] z-[100] bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
-    </div>
+        {/* Background Noise/Texture */}
+        <div className="fixed inset-0 pointer-events-none opacity-[0.03] z-[100] bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
+      </div>
+    </Router>
   );
 }
