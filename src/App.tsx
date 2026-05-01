@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform, useSpring, useMotionValue } from 'motion/react';
-import { BrowserRouter as Router, Routes, Route, Link, useLocation, useNavigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import Markdown from 'react-markdown';
 import { 
   Zap, 
@@ -32,7 +32,11 @@ import {
   Layers,
   ShieldCheck,
   Search,
-  LayoutGrid
+  LayoutGrid,
+  ZapOff,
+  TrendingUp,
+  RefreshCw,
+  GraduationCap
 } from 'lucide-react';
 import { cn } from './lib/utils';
 import { useInView } from 'react-intersection-observer';
@@ -525,7 +529,7 @@ const Hero = () => {
           
           <StaggeredText 
             as="h1"
-            text="Automated Systems. *Predictable* Growth." 
+            text="Zoho CRM *Consultant* for Small Businesses." 
             className="text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-semibold font-display leading-[1.1] md:leading-[1.05] mb-8 text-slate-900 tracking-[-0.04em]"
           />
           
@@ -536,10 +540,10 @@ const Hero = () => {
             className="space-y-6 mb-12 border-l-2 border-brand-blue/30 pl-6"
           >
             <p className="text-xl md:text-2xl text-slate-900 font-semibold leading-snug max-w-xl">
-              We architect the digital infrastructure that turns manual friction into a scaling force.
+              Is your growth throttled by manual data entry and lead leakage?
             </p>
             <p className="text-lg text-slate-600 leading-relaxed max-w-lg">
-              From bespoke Zoho CRM ecosystems to AI-driven workflow optimization, we build the systems that help modern teams scale without the overhead of additional headcount.
+              We help small business owners (5-50 employees) reclaim <strong>20+ hours per week</strong> through strategic Zoho automation. We don't just set up software; we build the digital backbone of your company.
             </p>
           </motion.div>
           
@@ -553,7 +557,7 @@ const Hero = () => {
               href="#booking"
               className="px-10 py-5 bg-slate-900 text-white font-bold rounded-full hover:bg-brand-blue hover:shadow-[0_20px_40px_-10px_rgba(59,130,246,0.5)] transition-all flex items-center justify-center gap-2 group shadow-xl"
             >
-              Start Your Audit
+              Free ROI Assessment
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </a>
             <a 
@@ -582,44 +586,54 @@ const Hero = () => {
 const ImplementationServices = () => {
   const services = [
     {
-      title: "Data Cleaning",
-      desc: "Turn messy datasets into clear insights. We audit, scrub, and deduplicate your lead data to ensure every decision is based on absolute accuracy.",
-      icon: <Database className="w-6 h-6" />,
-      tags: ["Lead Hygiene", "Data Integrity", "Deduplication"],
+      title: "Zoho CRM Implementation",
+      desc: "Comprehensive setup for new users. We design your architecture, modules, and layouts to match how you actually sell, ensuring 100% team adoption from day one.",
+      icon: <LayoutGrid className="w-6 h-6" />,
+      tags: ["Architecture", "Custom Layouts", "Adoption"],
       color: "from-blue-500/10 to-blue-500/20",
       iconColor: "text-blue-500",
       cta: "Learn More",
-      href: "#booking"
+      href: "/services/crm-implementation"
     },
     {
-      title: "CRM Customization",
-      desc: "Tailored pipelines and field logic built around your specific sales process, ensuring your team spends more time closing and less time clicking.",
-      icon: <LayoutGrid className="w-6 h-6" />,
-      tags: ["Custom Pipelines", "User Adoption", "Field Logic"],
+      title: "Automation & Design",
+      desc: "Stop the manual follow-ups. We build complex blueprints and custom functions that handle lead routing, email sequences, and task priority automatically.",
+      icon: <Zap className="w-6 h-6" />,
+      tags: ["Lead Scoring", "Blueprints", "Functions"],
       color: "from-brand-blue/10 to-brand-blue/20",
       iconColor: "text-brand-blue",
       cta: "Get Started",
-      href: "#booking"
+      href: "/services/workflow-automation"
     },
     {
-      title: "Workflow Automation",
-      desc: "Eliminate repetitive administrative work. We connect your tools and automate lead follow-ups so no potential customer ever smells a delay.",
-      icon: <Zap className="w-6 h-6" />,
-      tags: ["App Syncing", "Lead Capture", "Auto Follow-ups"],
+      title: "Seamless CRM Migration",
+      desc: "Moving from Salesforce or HubSpot? We handle the heavy lifting, ensuring your data remains clean, mapped, and fully intact during the transition.",
+      icon: <RefreshCw className="w-6 h-6" />,
+      tags: ["Data Mapping", "Cleanup", "Zero Loss"],
       color: "from-brand-cyan/10 to-brand-cyan/20",
       iconColor: "text-brand-cyan",
       cta: "Get Started",
-      href: "#booking"
+      href: "/services/crm-migration"
     },
     {
-      title: "Custom Solutions",
-      desc: "Unique business logic requires unique tech. We develop flexible solutions based on your specific requirements to fuel your next growth phase.",
-      icon: <Rocket className="w-6 h-6" />,
-      tags: ["Bespoke Builds", "Scalable Tech", "Strategic ROI"],
+      title: "Training & Support",
+      desc: "We don't just hand over the keys. We provide team training, custom documentation, and ongoing support to ensure your technology scales as you do.",
+      icon: <GraduationCap className="w-6 h-6" />,
+      tags: ["Team Training", "Support", "Docs"],
       color: "from-brand-purple/10 to-brand-purple/20",
       iconColor: "text-brand-purple",
       cta: "Get Started",
-      href: "#booking"
+      href: "/services/training-support"
+    },
+    {
+      title: "Zoho One Implementation",
+      desc: "Harness the full power of 45+ integrated apps. We connect Zoho Books, Projects, and Inventory to create a unified business ecosystem.",
+      icon: <Layers className="w-6 h-6" />,
+      tags: ["App Sync", "Zoho One", "Operations"],
+      color: "from-emerald-500/10 to-emerald-500/20",
+      iconColor: "text-emerald-500",
+      cta: "Get Started",
+      href: "/services/zoho-one"
     }
   ];
 
@@ -634,7 +648,7 @@ const ImplementationServices = () => {
             className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-slate-50 border border-slate-100 mb-6"
           >
             <div className="w-2 h-2 rounded-full bg-brand-blue animate-pulse" />
-            <span className="text-[10px] font-bold tracking-[0.3em] text-slate-500 uppercase">Core Offerings</span>
+            <span className="text-[10px] font-bold tracking-[0.3em] text-slate-500 uppercase">Core Services</span>
           </motion.div>
           <motion.h2 
             initial={{ opacity: 0, y: 20 }}
@@ -643,14 +657,15 @@ const ImplementationServices = () => {
             transition={{ delay: 0.1 }}
             className="text-4xl md:text-6xl font-semibold font-display mb-8 text-slate-900 tracking-[-0.04em]"
           >
-            Scale with <span className="font-serif italic text-brand-blue">Strategic</span> Systems.
+            Expert <span className="font-serif italic text-brand-blue">Implementation</span> for Scale.
           </motion.h2>
           <p className="text-slate-500 max-w-2xl mx-auto text-lg leading-relaxed">
-            We don't just implement tools; we build the digital infrastructure that empowers your team and automates your success.
+            We bridge the gap between software and strategy. As your Zoho CRM consultant, we provide the technical architecture needed to automate your success.
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {services.map((s, i) => (
             <motion.div
               key={i}
@@ -681,13 +696,13 @@ const ImplementationServices = () => {
                   ))}
                 </div>
 
-                <a 
-                  href={s.href}
+                <Link 
+                  to={s.href}
                   className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-brand-blue group-hover:gap-4 transition-all"
                 >
                   {s.cta}
                   <ArrowRight className="w-4 h-4" />
-                </a>
+                </Link>
               </div>
             </motion.div>
           ))}
@@ -822,10 +837,10 @@ const ProblemSection = () => {
   const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.1 });
 
   const problems = [
-    { icon: <Users className="w-5 h-5" />, title: "Lead Leakage", desc: "60% of leads go cold because of slow manual follow-ups." },
-    { icon: <Clock className="w-5 h-5" />, title: "Operational Drag", desc: "Repetitive tasks eat 40% of your team's productive hours." },
-    { icon: <Database className="w-5 h-5" />, title: "Siloed Intelligence", desc: "Data scattered across tools creates a blind spot for growth." },
-    { icon: <Rocket className="w-5 h-5" />, title: "Scale Ceiling", desc: "You can't grow because your processes break under pressure." },
+    { icon: <ZapOff className="w-5 h-5" />, title: "Lead Churn", desc: "60% of leads go cold because of slow manual follow-ups." },
+    { icon: <Clock className="w-5 h-5" />, title: "The 'Manual Tax'", desc: "Repetitive tasks eat 40% of your team's productive hours." },
+    { icon: <Database className="w-5 h-5" />, title: "Messy Data", desc: "Data scattered across tools creates a blind spot for growth." },
+    { icon: <TrendingUp className="w-5 h-5" />, title: "Scale Ceiling", desc: "You can't grow because your processes break under pressure." },
   ];
 
   return (
@@ -863,7 +878,7 @@ const ProblemSection = () => {
               transition={{ delay: 0.1 }}
               className="text-white/50 text-xl max-w-xl mb-12 leading-relaxed"
             >
-              Most small businesses reach a plateau not because of their product, but because their internal engine is built on manual labor instead of automated logic.
+              When your CRM is just a digital Rolodex, potential deals leak through the cracks. Inaccurate reporting leads to guesswork, and manual follow-ups result in missed opportunities. We eliminate this friction.
             </motion.p>
 
             <div className="space-y-4">
@@ -905,9 +920,9 @@ const HowItWorks = () => {
   const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.1 });
 
   const steps = [
-    { number: "01", title: "Understand Your Business", desc: "Identify gaps in your sales, CRM, and operations." },
-    { number: "02", title: "Build Your CRM System", desc: "Implement Zoho CRM, automations, and integrations." },
-    { number: "03", title: "Grow with Automation", desc: "Scale your revenue and reclaim your time with a high-performance digital engine." },
+    { number: "01", title: "Strategy Audit & Mapping", desc: "We begin with a deep dive into your current sales process. We identify lead leakages, manual bottlenecks, and disconnected tools that are costing you time and revenue. The result is a comprehensive Zoho blueprints and automation roadmap." },
+    { number: "02", title: "Architecture & Automation build", desc: "Our engineers build your custom Zoho CRM ecosystem. We design modules, optimize field logic, and deploy 'The Manual Tax' eliminators—advanced custom functions and workflows that handle lead routing and follow-ups without human intervention." },
+    { number: "03", title: "Scaling & Continuous Support", desc: "We launch your system with full-team training to ensure 100% adoption. But we don't stop there. We provide ongoing strategic support, refining your automations as you scale from 10 to 50+ employees, keeping your efficiency at peak levels." },
   ];
 
   return (
@@ -1283,6 +1298,191 @@ const Footer = () => {
   );
 };
 
+// --- Services Content ---
+const SERVICES: Record<string, any> = {
+  "data-cleaning": {
+    title: "Data Cleaning & Hygiene Services",
+    subtitle: "Turn Messy Datasets into Reliable Insights",
+    hero: "Is your CRM filled with duplicates, outdated info, and formatting nightmares? We audit, scrub, and dedup your lead data so you can trust your reporting and reach the right people every time.",
+    benefits: [
+      { title: "Trust Your Data", desc: "Make decisions based on facts, not artifacts of messy input or broken integrations." },
+      { title: "Boost Deliverability", desc: "Cleaner email lists mean lower bounce rates and better sender reputation." },
+      { title: "Sales Efficiency", desc: "Your team stops wasting time on duplicate records and inaccurate lead info." },
+      { title: "Better Segmentation", desc: "Clean fields allow for laser-focused marketing and sales campaigning." }
+    ],
+    features: [
+      { step: "01", title: "Comprehensive Data Audit", desc: "We scan your entire database to identify duplicates, formatting errors, and missing fields that are costing you money." },
+      { step: "02", title: "Scrubbing & Deduplication", desc: "Using advanced algorithms and manual review, we merge duplicate records and clean up naming conventions across your entire CRM." },
+      { step: "03", title: "Enrichment & Validation", desc: "We verify email addresses and phone numbers to ensure your outreach actually lands where it's supposed to." },
+      { step: "04", title: "Prevention Systems", desc: "We implement validation rules and automated workflows to prevent bad data from creeping back into your system." }
+    ],
+    metaTitle: "CRM Data Cleaning & Hygiene Services | AutoScale Works",
+    metaDesc: "Stop the data churn. Professional CRM data cleaning, deduplication, and hygiene services to ensure your business runs on accurate, reliable information."
+  },
+  "crm-customization": {
+    title: "Zoho CRM Customization & Optimization",
+    subtitle: "Built Around Your Unique Sales Process",
+    hero: "Software should adapt to your business, not the other way around. We build tailored pipelines, custom fields, and complex logic that mirrors how you actually sell, so your team focuses on closing.",
+    benefits: [
+      { title: "Higher Adoption", desc: "A system that matches your workflow is a system your team will actually want to use." },
+      { title: "Shorter Sales Cycles", desc: "Streamlined pipelines remove friction and move deals through the funnel faster." },
+      { title: "Custom Reporting", desc: "Track the metrics that truly matter to your specific industry and business model." },
+      { title: "Scalable Logic", desc: "We build systems that can handle 10x your current volume without breaking." }
+    ],
+    features: [
+      { step: "01", title: "Process Mapping", desc: "We map your current sales activities to identify bottlenecks and translate your manual steps into digital logic." },
+      { step: "02", title: "Architecture Design", desc: "We configure modules, layouts, and custom fields to create a focused, low-friction environment for your sales team." },
+      { step: "03", title: "Advanced Automation", desc: "From Blueprints to custom functions, we automate the 'busy work' that slows down your high-performers." },
+      { step: "04", title: "Training & Adoption", desc: "We create custom documentation and record training sessions to ensure your team hits the ground running." }
+    ],
+    metaTitle: "Professional Zoho CRM Customization Services | AutoScale Works",
+    metaDesc: "Maximize your CRM ROI. We provide expert Zoho CRM customization, process mapping, and workflow optimization tailored to your unique business needs."
+  },
+  "workflow-automation": {
+    title: "End-to-End Workflow Automation",
+    subtitle: "Eliminate the 'Administrative Tax' on Your Growth",
+    hero: "Stop paying humans to do what software does better. We connect your favorite tools and build automated sequences that handle follow-ups, sync data, and manage tasks, so no one drops the ball.",
+    benefits: [
+      { title: "Recover Productive Hours", desc: "Automate the repetitive manual tasks that consume 40% of your team's day." },
+      { title: "Instant Lead Response", desc: "Respond to new enquiries in seconds, significantly increasing your conversion chances." },
+      { title: "Zero Data Leakage", desc: "Automated syncing between apps ensures information is consistent across your entire tech stack." },
+      { title: "Task Priority", desc: "Your team only works on high-value tasks while the system handles the admin." }
+    ],
+    features: [
+      { step: "01", title: "Stack Audit", desc: "We review your current toolset (Make.com, Zapier, etc.) to identify the most impactful automation opportunities." },
+      { step: "02", title: "Integration Build", desc: "We build secure, robust connections between your CRM, marketing, and accounting platforms." },
+      { step: "03", title: "Sequence Automation", desc: "We design multi-stage automation workflows that handle complex logic and conditional triggers." },
+      { step: "04", title: "Optimization", desc: "We monitor performance and refine logic based on real-world edge cases that arise during scaling." }
+    ],
+    metaTitle: "Business Workflow Automation Services | AutoScale Works",
+    metaDesc: "Reclaim your time. We design and implement custom workflow automation using Make.com, Zapier, and Zoho to eliminate manual administrative work."
+  },
+  "custom-solutions": {
+    title: "Custom Business Logic & Tech Solutions",
+    subtitle: "Bespoke Engineering for Unique Challenges",
+    hero: "Sometimes off-the-shelf isn't enough. We build flexible, custom-engineered solutions that fill the gaps in standard software, allowing you to dominate your niche with technology built just for you.",
+    benefits: [
+      { title: "Competitive Edge", desc: "Own the process that your competitors can't replicate with standard SaaS." },
+      { title: "Perfect Fit", desc: "Every button, field, and notification is there because it serves a specific business purpose." },
+      { title: "Long-Term Value", desc: "Custom builds that grow with you, rather than forcing you to move platforms later." },
+      { title: "Reduced Overhead", desc: "Replace expensive, clunky workarounds with elegant, purpose-built code." }
+    ],
+    features: [
+      { step: "01", title: "Strategy Phase", desc: "We deep-dive into your 'impossible' challenges to find the most efficient technical path forward." },
+      { step: "02", title: "Agile Development", desc: "We build in iterative sprints, ensuring you see progress and provide feedback early and often." },
+      { step: "03", title: "Rigorous Testing", desc: "Every custom solution undergoes stress-testing to ensure reliability under high-load scaling scenarios." },
+      { step: "04", title: "Managed Deployment", desc: "We handle the transition and provide ongoing maintenance to keep your custom tech at peak performance." }
+    ],
+    metaTitle: "Custom Business Tech & Software Solutions | AutoScale Works",
+    metaDesc: "Unique business logic requires unique technology. Bespoke software engineering and custom tech solutions tailored to your specific growth challenges."
+  },
+  "specialized-growth": {
+    title: "Speciailzed AI & Data Growth Solutions",
+    subtitle: "Leverage the Frontier of Business Tech",
+    hero: "From autonomous AI agents that handle customer queries to data-driven platforms and MVP development, we build the future of your company using the most advanced tools available today.",
+    benefits: [
+      { title: "AI-Powered Efficiency", desc: "Deploy custom AI agents that handle complex tasks, research, and communication 24/7." },
+      { title: "Data Analytics", desc: "Turn raw data into actionable visual dashboards that guide your weekly strategy meetings." },
+      { title: "Rapid MVP Launch", desc: "Go from idea to functional application in weeks, not months, to test your new business lines." },
+      { title: "Future-Proof Tech", desc: "We implement the latest in AI and data architecture so you stay ahead of the curve." }
+    ],
+    features: [
+      { step: "01", title: "AI Feasibility Study", desc: "We identify exactly where AI can replace manual labor or enhance decision-making in your business." },
+      { step: "02", title: "Prototype Development", desc: "We build functional prototypes of AI agents or data platforms for rapid internal testing." },
+      { step: "03", title: "Scaling Architecture", desc: "We harden the successful prototypes into production-grade systems ready for client interaction." },
+      { step: "04", title: "Continuous Learning", desc: "We implement feedback loops so your AI and data systems get smarter the more you use them." }
+    ],
+    metaTitle: "Business AI Agents & Data Analytics Services | AutoScale Works",
+    metaDesc: "Unlock the power of AI. Custom AI agents, advanced data analytics, and rapid MVP development to fuel your company's next phase of growth."
+  }
+};
+
+const ServiceDetailPage = () => {
+  const { slug } = useParams();
+  const service = SERVICES[slug || ""];
+  
+  useEffect(() => {
+    if (service) {
+      document.title = service.metaTitle;
+      const metaDesc = document.querySelector('meta[name="description"]');
+      if (metaDesc) metaDesc.setAttribute("content", service.metaDesc);
+    }
+    window.scrollTo(0, 0);
+  }, [service]);
+
+  if (!service) {
+    return (
+      <div className="pt-40 pb-24 px-6 text-center">
+        <h1 className="text-2xl font-bold mb-4">Service not found</h1>
+        <Link to="/" className="text-brand-blue hover:underline">Return Home</Link>
+      </div>
+    );
+  }
+
+  return (
+    <div className="pt-32 pb-24 px-6 bg-white">
+      <div className="max-w-4xl mx-auto">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="prose prose-slate prose-blue max-w-none"
+        >
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 border border-slate-200 text-brand-blue text-[10px] font-bold mb-6 tracking-widest uppercase">
+            Service Details
+          </div>
+          <h1 className="text-4xl md:text-6xl font-semibold font-display mb-8 text-slate-900 tracking-[-0.04em]">
+            {service.title.split(' ').slice(0, -2).join(' ')} <span className="font-serif italic text-brand-blue">{service.title.split(' ').slice(-2).join(' ')}</span>
+          </h1>
+          
+          <p className="text-2xl text-slate-900 font-medium leading-relaxed mb-6 font-display">
+            {service.subtitle}
+          </p>
+
+          <p className="text-xl text-slate-600 leading-relaxed mb-12">
+            {service.hero}
+          </p>
+
+          <h2 className="text-2xl font-bold mt-12 mb-6 text-slate-900">The Strategic Benefits</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 my-12 not-prose">
+            {service.benefits.map((b: any, i: number) => (
+              <div key={i} className="p-6 rounded-2xl bg-slate-50 border border-slate-100 hover:border-brand-blue/30 transition-colors shadow-sm">
+                <h3 className="text-lg font-bold mb-2 text-brand-blue">{b.title}</h3>
+                <p className="text-sm text-slate-600 font-sans">{b.desc}</p>
+              </div>
+            ))}
+          </div>
+
+          <h2 className="text-2xl font-bold mt-12 mb-6 text-slate-900">Our Implementation Roadmap</h2>
+          <div className="space-y-12 my-12 not-prose">
+            {service.features.map((s: any, i: number) => (
+              <div key={i} className="flex gap-8 group">
+                <span className="text-5xl font-bold text-slate-100 font-display group-hover:text-brand-blue/10 transition-colors shrink-0">{s.step}</span>
+                <div className="pt-2">
+                  <h3 className="text-xl font-bold mb-3 text-slate-900">{s.title}</h3>
+                  <p className="text-slate-500 leading-relaxed font-sans">{s.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-24 p-12 rounded-[40px] bg-gradient-to-br from-brand-blue/5 to-brand-purple/5 border border-slate-200/50 text-center not-prose overflow-hidden relative shadow-xl">
+            <div className="absolute top-0 right-0 w-64 h-64 bg-brand-blue/5 blur-3xl -mr-32 -mt-32" />
+            <div className="relative z-10">
+              <h2 className="text-3xl md:text-5xl font-semibold mb-6 font-display text-slate-900 tracking-[-0.04em]">Ready to Scale Your Engine?</h2>
+              <p className="text-slate-500 mb-10 max-w-xl mx-auto">
+                Don't let technical debt slow your growth. Book your free custom audit today and see the exact roadmap for your digital transformation.
+              </p>
+              <Link to="/#booking" className="inline-block px-10 py-5 bg-brand-blue text-white font-bold rounded-full hover:shadow-[0_0_40px_rgba(59,130,246,0.3)] transition-all transform hover:scale-105">
+                Book My Free Audit
+              </Link>
+            </div>
+          </div>
+        </motion.div>
+      </div>
+    </div>
+  );
+};
+
 const ServicePage = () => {
   useEffect(() => {
     document.title = "Zoho CRM Consultant for Small Business | AutoScale Works";
@@ -1538,6 +1738,60 @@ Automation isn't about removing human connection; it’s about making sure that 
 
 // --- Main App ---
 
+const FAQSection = () => {
+  const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.1 });
+  
+  const faqs = [
+    {
+      q: "How long does a typical Zoho CRM implementation take?",
+      a: "For most small businesses, a standard implementation follows a 4 to 8-week roadmap. This includes architecture design, data migration, automation setup, and team training."
+    },
+    {
+      q: "Can you migrate our data from Salesforce or HubSpot?",
+      a: "Yes. We specialize in secure data migrations from Salesforce, HubSpot, Pipedrive, and even legacy spreadsheets. We ensure mapping is accurate and downtime is zero."
+    },
+    {
+      q: "What is the ROI of hiring a Zoho CRM consultant?",
+      a: "On average, our clients recover 20+ administrative hours per week through automation. By increasing lead response time and pipeline visibility, most see a positive ROI within the first 60 days."
+    },
+    {
+      q: "Do you offer training for my sales team?",
+      a: "Absolutely. Software is useless if your team won't use it. We provide 1-on-1 coaching, team workshops, and recorded video documentation tailored to your specific system."
+    },
+    {
+      q: "Why choose Zoho over Salesforce or HubSpot?",
+      a: "Zoho offers comparable enterprise-level power at a fraction of the cost. For small businesses, Zoho One provides an entire suite of 45+ integrated apps for the price of a single tool elsewhere."
+    }
+  ];
+
+  return (
+    <section className="py-32 bg-slate-50 px-6" ref={ref}>
+      <div className="max-w-4xl mx-auto">
+        <div className="text-center mb-16">
+          <div className="text-brand-blue font-bold text-[10px] tracking-[0.2em] uppercase mb-4">Common Questions</div>
+          <h2 className="text-4xl md:text-5xl font-semibold font-display text-slate-900 tracking-[-0.04em]">
+            Expert <span className="font-serif italic text-brand-blue">Guidance.</span> Clear Answers.
+          </h2>
+        </div>
+        
+        <div className="space-y-4">
+          {faqs.map((faq, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 10 }}
+              animate={inView ? { opacity: 1, y: 0 } : {}}
+              className="p-8 rounded-3xl bg-white border border-slate-100 shadow-sm"
+            >
+              <h3 className="text-xl font-bold mb-4 text-slate-900">{faq.q}</h3>
+              <p className="text-slate-500 leading-relaxed font-sans">{faq.a}</p>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
 const MainContent = () => {
   const location = useLocation();
 
@@ -1568,6 +1822,7 @@ const MainContent = () => {
       <BookingSection />
       <MetricsSection />
       <Testimonials />
+      <FAQSection />
     </>
   );
 };
@@ -1596,6 +1851,7 @@ export default function App() {
           <Routes>
             <Route path="/" element={<MainContent />} />
             <Route path="/services/zoho-crm-consultant" element={<ServicePage />} />
+            <Route path="/services/:slug" element={<ServiceDetailPage />} />
             <Route path="/blog/automate-lead-follow-ups-zoho-crm" element={<BlogPage />} />
           </Routes>
         </main>
