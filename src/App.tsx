@@ -529,7 +529,7 @@ const Hero = () => {
           
           <StaggeredText 
             as="h1"
-            text="Zoho CRM *Consultant* for Small Businesses." 
+            text="Zoho CRM & *Digital* Engineering for Small Businesses." 
             className="text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-semibold font-display leading-[1.1] md:leading-[1.05] mb-8 text-slate-900 tracking-[-0.04em]"
           />
           
@@ -543,7 +543,7 @@ const Hero = () => {
               Is your growth throttled by manual data entry and lead leakage?
             </p>
             <p className="text-lg text-slate-600 leading-relaxed max-w-lg">
-              We help small business owners (5-50 employees) reclaim <strong>20+ hours per week</strong> through strategic Zoho automation. We don't just set up software; we build the digital backbone of your company.
+              We help small business owners (5-50 employees) reclaim <strong>20+ hours per week</strong> through strategic automation and custom digital builds. We don't just set up software; we build the technical backbone of your company.
             </p>
           </motion.div>
           
@@ -616,6 +616,56 @@ const ImplementationServices = () => {
       href: "/services/crm-migration"
     },
     {
+      title: "Web & App Development",
+      desc: "Modern, high-performance websites and web applications built for conversion. We specialize in React, Next.js, and high-performance frontend engineering.",
+      icon: <Globe className="w-6 h-6" />,
+      tags: ["React/Vite", "SEO Ready", "Performance"],
+      color: "from-indigo-500/10 to-indigo-500/20",
+      iconColor: "text-indigo-500",
+      cta: "Build Now",
+      href: "#booking"
+    },
+    {
+      title: "Rapid MVP Creation",
+      desc: "Go from idea to launch in weeks, not months. We build lean, scalable Minimum Viable Products for startups and internal business tools.",
+      icon: <Rocket className="w-6 h-6" />,
+      tags: ["Product Strategy", "Low-Code/No-Code", "Scaling"],
+      color: "from-rose-500/10 to-rose-500/20",
+      iconColor: "text-rose-500",
+      cta: "Start Building",
+      href: "#booking"
+    },
+    {
+      title: "Data Intelligence",
+      desc: "Turn raw data into actionable growth strategies. We build custom dashboards and analytics pipelines to visualize your most critical KPIs.",
+      icon: <BarChart3 className="w-6 h-6" />,
+      tags: ["Dashboards", "KPI Tracking", "Insights"],
+      color: "from-amber-500/10 to-amber-500/20",
+      iconColor: "text-amber-500",
+      cta: "View Insights",
+      href: "#booking"
+    },
+    {
+      title: "Data Engineering",
+      desc: "The foundation of good automation. We scrub, deduplicate, and architect your data structures to ensure integrity across all your systems.",
+      icon: <Database className="w-6 h-6" />,
+      tags: ["Data Hygiene", "ETL Pipelines", "Cleansing"],
+      color: "from-emerald-500/10 to-emerald-500/20",
+      iconColor: "text-emerald-500",
+      cta: "Audit Data",
+      href: "#booking"
+    },
+    {
+      title: "Zoho One Ecosystem",
+      desc: "Harness the full power of 45+ integrated apps. We connect Zoho Books, Projects, and Inventory to create a unified business ecosystem.",
+      icon: <Layers className="w-6 h-6" />,
+      tags: ["App Sync", "Zoho One", "Operations"],
+      color: "from-cyan-500/10 to-cyan-500/20",
+      iconColor: "text-cyan-500",
+      cta: "Get Started",
+      href: "/services/zoho-one"
+    },
+    {
       title: "Training & Support",
       desc: "We don't just hand over the keys. We provide team training, custom documentation, and ongoing support to ensure your technology scales as you do.",
       icon: <GraduationCap className="w-6 h-6" />,
@@ -624,16 +674,6 @@ const ImplementationServices = () => {
       iconColor: "text-brand-purple",
       cta: "Get Started",
       href: "/services/training-support"
-    },
-    {
-      title: "Zoho One Implementation",
-      desc: "Harness the full power of 45+ integrated apps. We connect Zoho Books, Projects, and Inventory to create a unified business ecosystem.",
-      icon: <Layers className="w-6 h-6" />,
-      tags: ["App Sync", "Zoho One", "Operations"],
-      color: "from-emerald-500/10 to-emerald-500/20",
-      iconColor: "text-emerald-500",
-      cta: "Get Started",
-      href: "/services/zoho-one"
     }
   ];
 
@@ -648,7 +688,7 @@ const ImplementationServices = () => {
             className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-slate-50 border border-slate-100 mb-6"
           >
             <div className="w-2 h-2 rounded-full bg-brand-blue animate-pulse" />
-            <span className="text-[10px] font-bold tracking-[0.3em] text-slate-500 uppercase">Core Services</span>
+            <span className="text-[10px] font-bold tracking-[0.3em] text-slate-500 uppercase">Our Expertise</span>
           </motion.div>
           <motion.h2 
             initial={{ opacity: 0, y: 20 }}
@@ -657,10 +697,10 @@ const ImplementationServices = () => {
             transition={{ delay: 0.1 }}
             className="text-4xl md:text-6xl font-semibold font-display mb-8 text-slate-900 tracking-[-0.04em]"
           >
-            Expert <span className="font-serif italic text-brand-blue">Implementation</span> for Scale.
+            Full-Stack <span className="font-serif italic text-brand-blue">Automation</span> & Engineering.
           </motion.h2>
           <p className="text-slate-500 max-w-2xl mx-auto text-lg leading-relaxed">
-            We bridge the gap between software and strategy. As your Zoho CRM consultant, we provide the technical architecture needed to automate your success.
+            We bridge the gap between software and strategy. From enterprise-grade Zoho systems to custom web applications and data-driven insights.
           </p>
         </div>
 
@@ -1235,37 +1275,37 @@ const Footer = () => {
           {/* Links Columns */}
           <div className="lg:col-span-2">
             <h4 className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 mb-8">Solutions</h4>
-            <ul className="space-y-4 text-sm text-slate-500">
-              <li><Link to="/services/zoho-crm-consultant" className="hover:text-slate-900 hover:translate-x-1 inline-block transition-all font-medium">Zoho Consultant</Link></li>
-              <li><a href="/#services" className="hover:text-slate-900 hover:translate-x-1 inline-block transition-all font-medium">CRM Systems</a></li>
-              <li><a href="/#services" className="hover:text-slate-900 hover:translate-x-1 inline-block transition-all font-medium">Data Analytics</a></li>
-              <li><a href="/#services" className="hover:text-slate-900 hover:translate-x-1 inline-block transition-all font-medium">Custom AI Agents</a></li>
+            <ul className="space-y-4 text-sm text-slate-500 font-medium">
+              <li><Link to="/services/zoho-crm-consultant" className="hover:text-slate-900 hover:translate-x-1 inline-block transition-all">Zoho Consultant</Link></li>
+              <li><a href="#services" className="hover:text-slate-900 hover:translate-x-1 inline-block transition-all">Web Development</a></li>
+              <li><a href="#services" className="hover:text-slate-900 hover:translate-x-1 inline-block transition-all">MVP Builds</a></li>
+              <li><a href="#services" className="hover:text-slate-900 hover:translate-x-1 inline-block transition-all">Data Intelligence</a></li>
             </ul>
           </div>
 
           <div className="lg:col-span-2">
             <h4 className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 mb-8">Resources</h4>
-            <ul className="space-y-4 text-sm text-slate-500">
-              <li><Link to="/blog/automate-lead-follow-ups-zoho-crm" className="hover:text-slate-900 hover:translate-x-1 inline-block transition-all font-medium">Automation Guide</Link></li>
-              <li><a href="/#services" className="hover:text-slate-900 hover:translate-x-1 inline-block transition-all font-medium">AI Insights</a></li>
-              <li><a href="/#services" className="hover:text-slate-900 hover:translate-x-1 inline-block transition-all font-medium">Documentation</a></li>
-              <li><a href="/#services" className="hover:text-slate-900 hover:translate-x-1 inline-block transition-all font-medium">API Status</a></li>
+            <ul className="space-y-4 text-sm text-slate-500 font-medium">
+              <li><Link to="/blog/automate-lead-follow-ups-zoho-crm" className="hover:text-slate-900 hover:translate-x-1 inline-block transition-all">Automation Guide</Link></li>
+              <li><a href="#services" className="hover:text-slate-900 hover:translate-x-1 inline-block transition-all">AI Insights</a></li>
+              <li><a href="#services" className="hover:text-slate-900 hover:translate-x-1 inline-block transition-all">Documentation</a></li>
+              <li><a href="#booking" className="hover:text-slate-900 hover:translate-x-1 inline-block transition-all">ROI Calculator</a></li>
             </ul>
           </div>
 
           <div className="lg:col-span-2">
-            <h4 className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/30 mb-8">Company</h4>
-            <ul className="space-y-4 text-sm text-white/50">
-              <li><a href="/" className="hover:text-white hover:translate-x-1 inline-block transition-all">About Us</a></li>
-              <li><a href="/#how-it-works" className="hover:text-white hover:translate-x-1 inline-block transition-all">Our Process</a></li>
-              <li><a href="/#testimonials" className="hover:text-white hover:translate-x-1 inline-block transition-all">Success Stories</a></li>
-              <li><a href="/#booking" className="hover:text-white hover:translate-x-1 inline-block transition-all">Contact</a></li>
+            <h4 className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 mb-8">Company</h4>
+            <ul className="space-y-4 text-sm text-slate-500 font-medium">
+              <li><a href="/" className="hover:text-slate-900 hover:translate-x-1 inline-block transition-all">About Us</a></li>
+              <li><a href="/#how-it-works" className="hover:text-slate-900 hover:translate-x-1 inline-block transition-all">Our Process</a></li>
+              <li><a href="/#testimonials" className="hover:text-slate-900 hover:translate-x-1 inline-block transition-all">Success Stories</a></li>
+              <li><a href="/#booking" className="hover:text-slate-900 hover:translate-x-1 inline-block transition-all">Contact</a></li>
             </ul>
           </div>
 
           {/* Status Column */}
           <div className="lg:col-span-2 flex flex-col items-start lg:items-end">
-            <h4 className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/30 mb-8">System Status</h4>
+            <h4 className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 mb-8">System Status</h4>
             <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 text-[10px] font-bold mb-8">
               <span className="relative flex h-1.5 w-1.5">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75"></span>
@@ -1275,7 +1315,7 @@ const Footer = () => {
             </div>
             <button 
               onClick={scrollToTop}
-              className="mt-auto p-4 rounded-2xl bg-white/5 border border-white/10 text-white/40 hover:text-white hover:bg-white/10 hover:border-white/20 transition-all group"
+              className="mt-auto p-4 rounded-2xl bg-slate-50 border border-slate-200 text-slate-400 hover:text-slate-900 hover:bg-slate-100 hover:border-slate-300 transition-all group shadow-sm"
             >
               <ArrowRight className="w-5 h-5 -rotate-90 group-hover:-translate-y-1 transition-transform" />
             </button>
@@ -1283,14 +1323,14 @@ const Footer = () => {
         </div>
 
         {/* Bottom Bar */}
-        <div className="pt-12 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-8">
-          <div className="text-[9px] text-white/20 uppercase tracking-[0.3em] font-bold">
+        <div className="pt-12 border-t border-slate-100 flex flex-col md:flex-row justify-between items-center gap-8">
+          <div className="text-[9px] text-slate-400 uppercase tracking-[0.3em] font-bold">
             © 2026 AUTOSCALE.WORKS SOLUTIONS. ALL RIGHTS RESERVED.
           </div>
           <div className="flex gap-8">
-            <a href="#" className="text-[9px] text-white/20 uppercase tracking-[0.3em] font-bold hover:text-white transition-colors">Privacy Policy</a>
-            <a href="#" className="text-[9px] text-white/20 uppercase tracking-[0.3em] font-bold hover:text-white transition-colors">Terms of Service</a>
-            <a href="#" className="text-[9px] text-white/20 uppercase tracking-[0.3em] font-bold hover:text-white transition-colors">Cookie Policy</a>
+            <a href="#" className="text-[9px] text-slate-400 uppercase tracking-[0.3em] font-bold hover:text-slate-900 transition-colors">Privacy Policy</a>
+            <a href="#" className="text-[9px] text-slate-400 uppercase tracking-[0.3em] font-bold hover:text-slate-900 transition-colors">Terms of Service</a>
+            <a href="#" className="text-[9px] text-slate-400 uppercase tracking-[0.3em] font-bold hover:text-slate-900 transition-colors">Cookie Policy</a>
           </div>
         </div>
       </div>
