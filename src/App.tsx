@@ -678,7 +678,7 @@ const ImplementationServices = () => {
   ];
 
   return (
-    <section className="py-32 bg-white relative overflow-hidden px-6">
+    <section id="services" className="py-32 bg-white relative overflow-hidden px-6">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-24">
           <motion.div
@@ -1277,6 +1277,8 @@ const Footer = () => {
             <h4 className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 mb-8">Solutions</h4>
             <ul className="space-y-4 text-sm text-slate-500 font-medium">
               <li><Link to="/services/zoho-crm-consultant" className="hover:text-slate-900 hover:translate-x-1 inline-block transition-all">Zoho Consultant</Link></li>
+              <li><Link to="/services/crm-implementation" className="hover:text-slate-900 hover:translate-x-1 inline-block transition-all">CRM Implementation</Link></li>
+              <li><Link to="/services/workflow-automation" className="hover:text-slate-900 hover:translate-x-1 inline-block transition-all">Workflow Automation</Link></li>
               <li><Link to="/services/web-development" className="hover:text-slate-900 hover:translate-x-1 inline-block transition-all">Web Development</Link></li>
               <li><Link to="/services/mvp-creation" className="hover:text-slate-900 hover:translate-x-1 inline-block transition-all">MVP Builds</Link></li>
               <li><Link to="/services/data-intelligence" className="hover:text-slate-900 hover:translate-x-1 inline-block transition-all">Data Intelligence</Link></li>
@@ -1287,9 +1289,9 @@ const Footer = () => {
             <h4 className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 mb-8">Resources</h4>
             <ul className="space-y-4 text-sm text-slate-500 font-medium">
               <li><Link to="/blog/automate-lead-follow-ups-zoho-crm" className="hover:text-slate-900 hover:translate-x-1 inline-block transition-all">Automation Guide</Link></li>
-              <li><Link to="/#services" className="hover:text-slate-900 hover:translate-x-1 inline-block transition-all">AI Insights</Link></li>
-              <li><Link to="/#services" className="hover:text-slate-900 hover:translate-x-1 inline-block transition-all">Documentation</Link></li>
-              <li><Link to="/#booking" className="hover:text-slate-900 hover:translate-x-1 inline-block transition-all">ROI Calculator</Link></li>
+              <li><Link to="/services/zoho-one" className="hover:text-slate-900 hover:translate-x-1 inline-block transition-all">Zoho One Ecosystem</Link></li>
+              <li><Link to="/services/data-cleaning" className="hover:text-slate-900 hover:translate-x-1 inline-block transition-all">Data Hygiene</Link></li>
+              <li><a href="/#booking" className="hover:text-slate-900 hover:translate-x-1 inline-block transition-all">ROI Calculator</a></li>
             </ul>
           </div>
 
