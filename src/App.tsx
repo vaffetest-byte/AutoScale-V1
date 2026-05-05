@@ -622,8 +622,8 @@ const ImplementationServices = () => {
       tags: ["React/Vite", "SEO Ready", "Performance"],
       color: "from-indigo-500/10 to-indigo-500/20",
       iconColor: "text-indigo-500",
-      cta: "Build Now",
-      href: "#booking"
+      cta: "Learn More",
+      href: "/services/web-development"
     },
     {
       title: "Rapid MVP Creation",
@@ -632,8 +632,8 @@ const ImplementationServices = () => {
       tags: ["Product Strategy", "Low-Code/No-Code", "Scaling"],
       color: "from-rose-500/10 to-rose-500/20",
       iconColor: "text-rose-500",
-      cta: "Start Building",
-      href: "#booking"
+      cta: "Learn More",
+      href: "/services/mvp-creation"
     },
     {
       title: "Data Intelligence",
@@ -642,8 +642,8 @@ const ImplementationServices = () => {
       tags: ["Dashboards", "KPI Tracking", "Insights"],
       color: "from-amber-500/10 to-amber-500/20",
       iconColor: "text-amber-500",
-      cta: "View Insights",
-      href: "#booking"
+      cta: "Learn More",
+      href: "/services/data-intelligence"
     },
     {
       title: "Data Engineering",
@@ -652,8 +652,8 @@ const ImplementationServices = () => {
       tags: ["Data Hygiene", "ETL Pipelines", "Cleansing"],
       color: "from-emerald-500/10 to-emerald-500/20",
       iconColor: "text-emerald-500",
-      cta: "Audit Data",
-      href: "#booking"
+      cta: "Learn More",
+      href: "/services/data-cleaning"
     },
     {
       title: "Zoho One Ecosystem",
@@ -1277,9 +1277,9 @@ const Footer = () => {
             <h4 className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 mb-8">Solutions</h4>
             <ul className="space-y-4 text-sm text-slate-500 font-medium">
               <li><Link to="/services/zoho-crm-consultant" className="hover:text-slate-900 hover:translate-x-1 inline-block transition-all">Zoho Consultant</Link></li>
-              <li><a href="#services" className="hover:text-slate-900 hover:translate-x-1 inline-block transition-all">Web Development</a></li>
-              <li><a href="#services" className="hover:text-slate-900 hover:translate-x-1 inline-block transition-all">MVP Builds</a></li>
-              <li><a href="#services" className="hover:text-slate-900 hover:translate-x-1 inline-block transition-all">Data Intelligence</a></li>
+              <li><Link to="/services/web-development" className="hover:text-slate-900 hover:translate-x-1 inline-block transition-all">Web Development</Link></li>
+              <li><Link to="/services/mvp-creation" className="hover:text-slate-900 hover:translate-x-1 inline-block transition-all">MVP Builds</Link></li>
+              <li><Link to="/services/data-intelligence" className="hover:text-slate-900 hover:translate-x-1 inline-block transition-all">Data Intelligence</Link></li>
             </ul>
           </div>
 
@@ -1287,19 +1287,19 @@ const Footer = () => {
             <h4 className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 mb-8">Resources</h4>
             <ul className="space-y-4 text-sm text-slate-500 font-medium">
               <li><Link to="/blog/automate-lead-follow-ups-zoho-crm" className="hover:text-slate-900 hover:translate-x-1 inline-block transition-all">Automation Guide</Link></li>
-              <li><a href="#services" className="hover:text-slate-900 hover:translate-x-1 inline-block transition-all">AI Insights</a></li>
-              <li><a href="#services" className="hover:text-slate-900 hover:translate-x-1 inline-block transition-all">Documentation</a></li>
-              <li><a href="#booking" className="hover:text-slate-900 hover:translate-x-1 inline-block transition-all">ROI Calculator</a></li>
+              <li><Link to="/#services" className="hover:text-slate-900 hover:translate-x-1 inline-block transition-all">AI Insights</Link></li>
+              <li><Link to="/#services" className="hover:text-slate-900 hover:translate-x-1 inline-block transition-all">Documentation</Link></li>
+              <li><Link to="/#booking" className="hover:text-slate-900 hover:translate-x-1 inline-block transition-all">ROI Calculator</Link></li>
             </ul>
           </div>
 
           <div className="lg:col-span-2">
             <h4 className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 mb-8">Company</h4>
             <ul className="space-y-4 text-sm text-slate-500 font-medium">
-              <li><a href="/" className="hover:text-slate-900 hover:translate-x-1 inline-block transition-all">About Us</a></li>
-              <li><a href="/#how-it-works" className="hover:text-slate-900 hover:translate-x-1 inline-block transition-all">Our Process</a></li>
-              <li><a href="/#testimonials" className="hover:text-slate-900 hover:translate-x-1 inline-block transition-all">Success Stories</a></li>
-              <li><a href="/#booking" className="hover:text-slate-900 hover:translate-x-1 inline-block transition-all">Contact</a></li>
+              <li><Link to="/" className="hover:text-slate-900 hover:translate-x-1 inline-block transition-all">About Us</Link></li>
+              <li><Link to="/#how-it-works" className="hover:text-slate-900 hover:translate-x-1 inline-block transition-all">Our Process</Link></li>
+              <li><Link to="/#testimonials" className="hover:text-slate-900 hover:translate-x-1 inline-block transition-all">Success Stories</Link></li>
+              <li><Link to="/#booking" className="hover:text-slate-900 hover:translate-x-1 inline-block transition-all">Contact</Link></li>
             </ul>
           </div>
 
@@ -1340,43 +1340,24 @@ const Footer = () => {
 
 // --- Services Content ---
 const SERVICES: Record<string, any> = {
-  "data-cleaning": {
-    title: "Data Cleaning & Hygiene Services",
-    subtitle: "Turn Messy Datasets into Reliable Insights",
-    hero: "Is your CRM filled with duplicates, outdated info, and formatting nightmares? We audit, scrub, and dedup your lead data so you can trust your reporting and reach the right people every time.",
+  "crm-implementation": {
+    title: "Zoho CRM Architecture & Implementation",
+    subtitle: "A Foundation Built for Scalability",
+    hero: "Don't just install software—engineer a system. We design your CRM architecture from the ground up, ensuring your modules, fields, and layouts reflect your real-world sales process for 100% team adoption.",
     benefits: [
-      { title: "Trust Your Data", desc: "Make decisions based on facts, not artifacts of messy input or broken integrations." },
-      { title: "Boost Deliverability", desc: "Cleaner email lists mean lower bounce rates and better sender reputation." },
-      { title: "Sales Efficiency", desc: "Your team stops wasting time on duplicate records and inaccurate lead info." },
-      { title: "Better Segmentation", desc: "Clean fields allow for laser-focused marketing and sales campaigning." }
+      { title: "Zero Technical Debt", desc: "Start with a clean, perfectly mapped architecture that grows with your business." },
+      { title: "Maximum Adoption", desc: "We build layouts that sales teams actually enjoy using, reducing data-entry friction." },
+      { title: "High-Fidelity Reporting", desc: "Capture the right data points from day one for accurate forecasting and insights." },
+      { title: "Unified Operations", desc: "Standardize your processes across the entire organization for predictable results." }
     ],
     features: [
-      { step: "01", title: "Comprehensive Data Audit", desc: "We scan your entire database to identify duplicates, formatting errors, and missing fields that are costing you money." },
-      { step: "02", title: "Scrubbing & Deduplication", desc: "Using advanced algorithms and manual review, we merge duplicate records and clean up naming conventions across your entire CRM." },
-      { step: "03", title: "Enrichment & Validation", desc: "We verify email addresses and phone numbers to ensure your outreach actually lands where it's supposed to." },
-      { step: "04", title: "Prevention Systems", desc: "We implement validation rules and automated workflows to prevent bad data from creeping back into your system." }
+      { step: "01", title: "Business Logic Mapping", desc: "We identify every touchpoint in your customer journey and translate it into Zoho modules." },
+      { step: "02", title: "Custom Schema Design", desc: "Our engineers build custom fields, layouts, and validation rules that prevent messy data input." },
+      { step: "03", title: "Security & Permissions", desc: "We configure roles, profiles, and sharing rules to keep your sensitive data secure and focused." },
+      { step: "04", title: "Turnkey Launch", desc: "We deploy the system with custom dashboards and views so your team is productive from minute one." }
     ],
-    metaTitle: "CRM Data Cleaning & Hygiene Services | AutoScale Works",
-    metaDesc: "Stop the data churn. Professional CRM data cleaning, deduplication, and hygiene services to ensure your business runs on accurate, reliable information."
-  },
-  "crm-customization": {
-    title: "Zoho CRM Customization & Optimization",
-    subtitle: "Built Around Your Unique Sales Process",
-    hero: "Software should adapt to your business, not the other way around. We build tailored pipelines, custom fields, and complex logic that mirrors how you actually sell, so your team focuses on closing.",
-    benefits: [
-      { title: "Higher Adoption", desc: "A system that matches your workflow is a system your team will actually want to use." },
-      { title: "Shorter Sales Cycles", desc: "Streamlined pipelines remove friction and move deals through the funnel faster." },
-      { title: "Custom Reporting", desc: "Track the metrics that truly matter to your specific industry and business model." },
-      { title: "Scalable Logic", desc: "We build systems that can handle 10x your current volume without breaking." }
-    ],
-    features: [
-      { step: "01", title: "Process Mapping", desc: "We map your current sales activities to identify bottlenecks and translate your manual steps into digital logic." },
-      { step: "02", title: "Architecture Design", desc: "We configure modules, layouts, and custom fields to create a focused, low-friction environment for your sales team." },
-      { step: "03", title: "Advanced Automation", desc: "From Blueprints to custom functions, we automate the 'busy work' that slows down your high-performers." },
-      { step: "04", title: "Training & Adoption", desc: "We create custom documentation and record training sessions to ensure your team hits the ground running." }
-    ],
-    metaTitle: "Professional Zoho CRM Customization Services | AutoScale Works",
-    metaDesc: "Maximize your CRM ROI. We provide expert Zoho CRM customization, process mapping, and workflow optimization tailored to your unique business needs."
+    metaTitle: "Zoho CRM Implementation Services | AutoScale Works",
+    metaDesc: "Get a professional Zoho CRM setup. Expert architecture, custom layouts, and strategic implementation for small businesses ready to scale."
   },
   "workflow-automation": {
     title: "End-to-End Workflow Automation",
@@ -1397,43 +1378,138 @@ const SERVICES: Record<string, any> = {
     metaTitle: "Business Workflow Automation Services | AutoScale Works",
     metaDesc: "Reclaim your time. We design and implement custom workflow automation using Make.com, Zapier, and Zoho to eliminate manual administrative work."
   },
-  "custom-solutions": {
-    title: "Custom Business Logic & Tech Solutions",
-    subtitle: "Bespoke Engineering for Unique Challenges",
-    hero: "Sometimes off-the-shelf isn't enough. We build flexible, custom-engineered solutions that fill the gaps in standard software, allowing you to dominate your niche with technology built just for you.",
+  "crm-migration": {
+    title: "High-Fidelity CRM Data Migration",
+    subtitle: "Switch Platforms Without Losing a Single Lead",
+    hero: "Moving from Salesforce or HubSpot? We handle the complex technical lift of mapping, cleaning, and migrating your legacy data into Zoho with zero downtime and perfect integrity.",
     benefits: [
-      { title: "Competitive Edge", desc: "Own the process that your competitors can't replicate with standard SaaS." },
-      { title: "Perfect Fit", desc: "Every button, field, and notification is there because it serves a specific business purpose." },
-      { title: "Long-Term Value", desc: "Custom builds that grow with you, rather than forcing you to move platforms later." },
-      { title: "Reduced Overhead", desc: "Replace expensive, clunky workarounds with elegant, purpose-built code." }
+      { title: "Data Integrity", desc: "We ensure every field, note, and attachment is mapped correctly across platforms." },
+      { title: "Zero Operational Lag", desc: "Our phased migration approach means your team stays productive throughout the transition." },
+      { title: "Post-Migration Cleanup", desc: "We don't just move data; we scrub it, ensuring your new system starts clean." },
+      { title: "History Retention", desc: "Keep all your customer interaction history intact for a seamless transition." }
     ],
     features: [
-      { step: "01", title: "Strategy Phase", desc: "We deep-dive into your 'impossible' challenges to find the most efficient technical path forward." },
-      { step: "02", title: "Agile Development", desc: "We build in iterative sprints, ensuring you see progress and provide feedback early and often." },
-      { step: "03", title: "Rigorous Testing", desc: "Every custom solution undergoes stress-testing to ensure reliability under high-load scaling scenarios." },
-      { step: "04", title: "Managed Deployment", desc: "We handle the transition and provide ongoing maintenance to keep your custom tech at peak performance." }
+      { step: "01", title: "Data Source Audit", desc: "We analyze your folder structures, custom fields, and data volume in your current system." },
+      { step: "02", title: "Custom Mapping", desc: "We create a 1:1 map of your existing data to Zoho's architecture to prevent data loss." },
+      { step: "03", title: "Phased Migration", desc: "We perform a test migration first, then a final 'Delta' sync to ensure zero downtime." },
+      { step: "04", title: "Validation Check", desc: "We run rigorous scripts to verify all data was imported correctly and is fully accessible." }
     ],
-    metaTitle: "Custom Business Tech & Software Solutions | AutoScale Works",
-    metaDesc: "Unique business logic requires unique technology. Bespoke software engineering and custom tech solutions tailored to your specific growth challenges."
+    metaTitle: "Zoho CRM Migration Services | Salesforce to Zoho | AutoScale Works",
+    metaDesc: "Secure CRM data migration. We migrate your data from Salesforce, HubSpot, or Pipedrive to Zoho CRM with 100% integrity and zero downtime."
   },
-  "specialized-growth": {
-    title: "Speciailzed AI & Data Growth Solutions",
-    subtitle: "Leverage the Frontier of Business Tech",
-    hero: "From autonomous AI agents that handle customer queries to data-driven platforms and MVP development, we build the future of your company using the most advanced tools available today.",
+  "data-cleaning": {
+    title: "Data Engineering & Hygiene Services",
+    subtitle: "The Foundation of Reliable Automation",
+    hero: "Is your CRM filled with duplicates, outdated info, and formatting nightmares? We audit, scrub, and dedup your lead data so you can trust your reporting and reach the right people every time.",
     benefits: [
-      { title: "AI-Powered Efficiency", desc: "Deploy custom AI agents that handle complex tasks, research, and communication 24/7." },
-      { title: "Data Analytics", desc: "Turn raw data into actionable visual dashboards that guide your weekly strategy meetings." },
-      { title: "Rapid MVP Launch", desc: "Go from idea to functional application in weeks, not months, to test your new business lines." },
-      { title: "Future-Proof Tech", desc: "We implement the latest in AI and data architecture so you stay ahead of the curve." }
+      { title: "Trust Your Data", desc: "Make decisions based on facts, not artifacts of messy input or broken integrations." },
+      { title: "Boost Deliverability", desc: "Cleaner email lists mean lower bounce rates and better sender reputation." },
+      { title: "Sales Efficiency", desc: "Your team stops wasting time on duplicate records and inaccurate lead info." },
+      { title: "Better Segmentation", desc: "Clean fields allow for laser-focused marketing and sales campaigning." }
     ],
     features: [
-      { step: "01", title: "AI Feasibility Study", desc: "We identify exactly where AI can replace manual labor or enhance decision-making in your business." },
-      { step: "02", title: "Prototype Development", desc: "We build functional prototypes of AI agents or data platforms for rapid internal testing." },
-      { step: "03", title: "Scaling Architecture", desc: "We harden the successful prototypes into production-grade systems ready for client interaction." },
-      { step: "04", title: "Continuous Learning", desc: "We implement feedback loops so your AI and data systems get smarter the more you use them." }
+      { step: "01", title: "Comprehensive Data Audit", desc: "We scan your entire database to identify duplicates, formatting errors, and missing fields." },
+      { step: "02", title: "Scrubbing & Deduplication", desc: "Using advanced algorithms and manual review, we merge duplicate records across all modules." },
+      { step: "03", title: "Enrichment & Validation", desc: "We verify contact info and normalize data formats for consistent system wide utility." },
+      { step: "04", title: "Governance Systems", desc: "We implement validation rules to prevent bad data from ever entering your CRM again." }
     ],
-    metaTitle: "Business AI Agents & Data Analytics Services | AutoScale Works",
-    metaDesc: "Unlock the power of AI. Custom AI agents, advanced data analytics, and rapid MVP development to fuel your company's next phase of growth."
+    metaTitle: "Data Cleaning & Engineering Services | CRM Hygiene | AutoScale Works",
+    metaDesc: "Stop the data churn. Professional CRM data cleaning, deduplication, and hygiene services to ensure your business runs on accurate, reliable information."
+  },
+  "zoho-one": {
+    title: "Zoho One Ecosystem Connectivity",
+    subtitle: "Unified Power Across 45+ Business Apps",
+    hero: "Harness the full power of the Zoho One suite. We bridge the gaps between CRM, Books, Projects, and Inventory to create a single, unified nervous system for your entire business.",
+    benefits: [
+      { title: "Unified View", desc: "See your finance, sales, and operations data in one single, coherent dashboard." },
+      { title: "Cross-App Automation", desc: "Trigger actions in Zoho Books when a deal closes in CRM automatically." },
+      { title: "Cost Efficiency", desc: "Replace dozens of expensive point solutions with one integrated software ecosystem." },
+      { title: "Centralized Admin", desc: "Manage users, security, and permissions from one single control panel." }
+    ],
+    features: [
+      { step: "01", title: "App Stack Strategy", desc: "We identify which Zoho One apps are right for your business model and how they should talk." },
+      { step: "02", title: "Inter-App Syncing", desc: "We build custom functions that keep your data synchronized between CRM and back-office apps." },
+      { step: "03", title: "Operational Blueprints", desc: "We design processes that span multiple departments, ensuring a smooth handoff from sales to finance." },
+      { step: "04", title: "Legacy Integration", desc: "We connect your Zoho ecosystem to any remaining third-party tools via custom APIs." }
+    ],
+    metaTitle: "Zoho One Implementation & Integration | AutoScale Works",
+    metaDesc: "Unlock the full power of Zoho One. We integrate Zoho CRM with Books, Projects, and Inventory for a unified business operations engine."
+  },
+  "training-support": {
+    title: "Strategic Training & Ongoing Support",
+    subtitle: "Ensuring Your Tech Actually Gets Used",
+    hero: "Software is only as good as the team using it. we provide personalized training and priority support to ensure your technology serves your growth, not the other way around.",
+    benefits: [
+      { title: "100% Adoption", desc: "We tackle software resistance by showing your team exactly how the system saves them time." },
+      { title: "Custom Documentation", desc: "Forget generic manuals. Get SOPs and videos tailored specifically to your custom build." },
+      { title: "Priority Support", desc: "Get rapid answers to technical questions and system adjustments as you scale." },
+      { title: "Ongoing Optimization", desc: "We monitor your system health and recommend improvements as your business evolves." }
+    ],
+    features: [
+      { step: "01", title: "Team Workshops", desc: "Interactive sessions where we walk your team through their new automated workflows." },
+      { step: "02", title: "Custom Video Library", desc: "A private knowledge base of short, actionable videos showing how to use your specific system." },
+      { step: "03", title: "Help Desk Access", desc: "Direct access to our senior engineers for troubleshooting and strategic adjustments." },
+      { step: "04", title: "Quarterly Audits", desc: "We check your system performance and data health every three months to ensure peak efficiency." }
+    ],
+    metaTitle: "Zoho CRM Training & Strategic Support | AutoScale Works",
+    metaDesc: "Don't get stuck. We provide custom Zoho CRM training for teams and ongoing strategic support to ensure your technology scales with your business."
+  },
+  "web-development": {
+    title: "High-Performance Web Engineering",
+    subtitle: "Built for Conversion and Speed",
+    hero: "Your website is your silent salesman. We build modern, lightning-fast web applications using React, Next.js, and Tailwind CSS that don't just look good—they convert visitors into customers.",
+    benefits: [
+      { title: "Blazing Performance", desc: "Sub-second load times that keep visitors engaged and boost SEO rankings." },
+      { title: "Conversion Optimized", desc: "Every pixel is placed with a specific user action in mind to maximize your ROI." },
+      { title: "Mobile-First Design", desc: "Flawless experiences across all devices, ensuring you never miss a mobile lead." },
+      { title: "Secure & Scalable", desc: "Built with modern frameworks that handle traffic spikes and security threats with ease." }
+    ],
+    features: [
+      { step: "01", title: "Technical Blueprint", desc: "We map out your site architecture and user flows before a single line of code is written." },
+      { step: "02", title: "Frontend Engineering", desc: "Clean, semantic code using the latest React patterns for a smooth, app-like feel." },
+      { step: "03", title: "CMS Integration", desc: "We set up headless CMS solutions so your team can update content without breaking the site." },
+      { step: "04", title: "Performance Tuning", desc: "Rigorous optimization for Core Web Vitals to ensure you rank higher and load faster." }
+    ],
+    metaTitle: "Custom Web Development & Engineering | AutoScale Works",
+    metaDesc: "Modern web engineering for modern businesses. We build high-performance React and Next.js websites designed for conversion and scale."
+  },
+  "mvp-creation": {
+    title: "Rapid MVP & Product Development",
+    subtitle: "From Idea to Market in Record Time",
+    hero: "Stop over-engineering. We help founders and innovators launch their Minimum Viable Products in weeks, not months, focusing on the core features that prove your business model.",
+    benefits: [
+      { title: "Speed to Market", desc: "Launch your core value proposition while your competitors are still in planning." },
+      { title: "Cost Efficiency", desc: "Focus your budget on essential features that validate your product-market fit." },
+      { title: "Scalable Foundation", desc: "Built with a clean architecture that can grow into a full-scale enterprise product." },
+      { title: "Investor Ready", desc: "A polished, functional product that demonstrates traction to potential stakeholders." }
+    ],
+    features: [
+      { step: "01", title: "Product Strategy", desc: "We help you define your 'Minimum'—the exact features needed to solve the core problem." },
+      { step: "02", title: "Rapid Prototyping", desc: "Quick iterations to visualize the user experience and gather early feedback." },
+      { step: "03", title: "Core Build", desc: "Lean development focusing on stability, usability, and the primary user happy path." },
+      { step: "04", title: "Launch & Analytics", desc: "We help you deploy and set up metrics to track user behavior and guide your next sprint." }
+    ],
+    metaTitle: "Rapid MVP Development Services | Startup Launch | AutoScale Works",
+    metaDesc: "Launch fast. We specialize in rapid MVP development for startups and corporate innovators, taking you from concept to launch in weeks."
+  },
+  "data-intelligence": {
+    title: "Advanced Data Intelligence & Analytics",
+    subtitle: "Turn Raw Data into Actionable Strategy",
+    hero: "Data is the new oil, but only if you can refine it. We build custom analytics pipelines and visual dashboards that give you a real-time pulse on your business growth and bottleneck.",
+    benefits: [
+      { title: "Real-Time Clarity", desc: "Stop waiting for end-of-month reports. See your KPIs accurately reflected 24/7." },
+      { title: "Outcome-Based Tracking", desc: "We track the actions that actually lead to revenue, not just vanity metrics." },
+      { title: "Predictive Insights", desc: "Identify trends early and adjust your strategy before problems become liabilities." },
+      { title: "Unified Dashboards", desc: "Gather data from CRM, Ads, and Finance into one single, coherent visual story." }
+    ],
+    features: [
+      { step: "01", title: "KPI Definition", desc: "We identify the 3-5 'North Star' metrics that truly drive your business growth." },
+      { step: "02", title: "Data Pipeline Build", desc: "We connect your disparate data sources into a centralized, clean analytics engine." },
+      { step: "03", title: "Dashboard Engineering", desc: "We build intuitive visual interfaces that make complex data easy for your team to understand." },
+      { step: "04", title: "Strategic Review", desc: "We show you how to interpret the numbers to make better, faster operational decisions." }
+    ],
+    metaTitle: "Data Intelligence & Business Analytics | AutoScale Works",
+    metaDesc: "Master your metrics. Custom data analytics pipelines and visual dashboards that turn your business data into strategic growth."
   }
 };
 
@@ -1637,9 +1713,9 @@ const ServicePage = () => {
               <p className="text-slate-500 mb-10 max-w-xl mx-auto">
                 Join dozens of small businesses that have scaled their revenue by automating their workflows. Your free audit is just a click away.
               </p>
-              <a href="/#booking" className="inline-block px-10 py-5 bg-brand-blue text-white font-bold rounded-full hover:shadow-[0_0_40px_rgba(59,130,246,0.3)] transition-all transform hover:scale-105">
+              <Link to="/#booking" className="inline-block px-10 py-5 bg-brand-blue text-white font-bold rounded-full hover:shadow-[0_0_40px_rgba(59,130,246,0.3)] transition-all transform hover:scale-105">
                 Book a Free Automation Audit
-              </a>
+              </Link>
             </div>
           </div>
         </motion.div>
