@@ -1,5 +1,6 @@
 {
   "name": "AutoScale Works - AI Automation & Systems",
   "description": "High-converting AI & Automation solutions for modern businesses. Scale faster with AI agents, CRM, and workflow automation.",
-  "requestFramePermissions": []
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

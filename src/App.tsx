@@ -2,6 +2,10 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform, useSpring, useMotionValue } from 'motion/react';
 import { BrowserRouter as Router, Routes, Route, Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import Markdown from 'react-markdown';
+import Chatbot from './components/Chatbot';
+import AdminConsole from './components/AdminConsole';
+import AnalyticsTracker from './components/AnalyticsTracker';
+import SeoBlogPage from './components/SeoBlogPage';
 import { 
   Zap, 
   Bot, 
@@ -1288,7 +1292,8 @@ const Footer = () => {
           <div className="lg:col-span-2">
             <h4 className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 mb-8">Resources</h4>
             <ul className="space-y-4 text-sm text-slate-500 font-medium">
-              <li><Link to="/blog/automate-lead-follow-ups-zoho-crm" className="hover:text-slate-900 hover:translate-x-1 inline-block transition-all">Automation Guide</Link></li>
+              <li><Link to="/blog/automate-lead-follow-ups-zoho-crm" className="hover:text-slate-900 hover:translate-x-1 inline-block transition-all">CRM Follow-Up Guide</Link></li>
+              <li><Link to="/blog/chatgpt-vs-gemini-for-seo-automation" className="hover:text-slate-900 hover:translate-x-1 inline-block transition-all font-semibold text-brand-blue">ChatGPT vs Gemini SEO</Link></li>
               <li><Link to="/services/zoho-one" className="hover:text-slate-900 hover:translate-x-1 inline-block transition-all">Zoho One Ecosystem</Link></li>
               <li><Link to="/services/data-cleaning" className="hover:text-slate-900 hover:translate-x-1 inline-block transition-all">Data Hygiene</Link></li>
               <li><a href="/#booking" className="hover:text-slate-900 hover:translate-x-1 inline-block transition-all">ROI Calculator</a></li>
@@ -1301,7 +1306,7 @@ const Footer = () => {
               <li><Link to="/" className="hover:text-slate-900 hover:translate-x-1 inline-block transition-all">About Us</Link></li>
               <li><Link to="/#how-it-works" className="hover:text-slate-900 hover:translate-x-1 inline-block transition-all">Our Process</Link></li>
               <li><Link to="/#testimonials" className="hover:text-slate-900 hover:translate-x-1 inline-block transition-all">Success Stories</Link></li>
-              <li><Link to="/#booking" className="hover:text-slate-900 hover:translate-x-1 inline-block transition-all">Contact</Link></li>
+              <li><a href="/#booking" className="hover:text-slate-900 hover:translate-x-1 inline-block transition-all">Contact</a></li>
             </ul>
           </div>
 
@@ -1965,16 +1970,23 @@ export default function App() {
 
         <Navbar />
         
+        {/* Track SPA navigation & interaction */}
+        <AnalyticsTracker />
+        
         <main>
           <Routes>
             <Route path="/" element={<MainContent />} />
             <Route path="/services/zoho-crm-consultant" element={<ServicePage />} />
             <Route path="/services/:slug" element={<ServiceDetailPage />} />
             <Route path="/blog/automate-lead-follow-ups-zoho-crm" element={<BlogPage />} />
+            <Route path="/blog/chatgpt-vs-gemini-for-seo-automation" element={<SeoBlogPage />} />
+            <Route path="/admin" element={<AdminConsole />} />
           </Routes>
         </main>
 
         <Footer />
+
+        <Chatbot />
 
         {/* Background Noise/Texture */}
         <div className="fixed inset-0 pointer-events-none opacity-[0.03] z-[100] bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
