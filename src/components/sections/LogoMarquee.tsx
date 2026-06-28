@@ -65,14 +65,14 @@ const LogoMarquee = () => {
                 <div className="relative w-8 h-8">
                   <img 
                     src={`https://cdn.simpleicons.org/${logo.slug}/64748b`} 
-                    alt={logo.name} 
+                    alt="" 
                     className="absolute inset-0 w-full h-full opacity-40 group-hover/logo:opacity-0 transition-opacity duration-500"
                     referrerPolicy="no-referrer"
                     loading="lazy"
                   />
                   <img 
                     src={`https://cdn.simpleicons.org/${logo.slug}/${logo.color.replace('#', '')}`} 
-                    alt={logo.name} 
+                    alt="" 
                     className="absolute inset-0 w-full h-full opacity-0 group-hover/logo:opacity-100 transition-opacity duration-500"
                     referrerPolicy="no-referrer"
                     loading="lazy"
@@ -101,14 +101,14 @@ const LogoMarquee = () => {
                 <div className="relative w-8 h-8">
                   <img 
                     src={`https://cdn.simpleicons.org/${logo.slug}/64748b`} 
-                    alt={logo.name} 
+                    alt="" 
                     className="absolute inset-0 w-full h-full opacity-40 group-hover/logo:opacity-0 transition-opacity duration-500"
                     referrerPolicy="no-referrer"
                     loading="lazy"
                   />
                   <img 
                     src={`https://cdn.simpleicons.org/${logo.slug}/${logo.color.replace('#', '')}`} 
-                    alt={logo.name} 
+                    alt="" 
                     className="absolute inset-0 w-full h-full opacity-0 group-hover/logo:opacity-100 transition-opacity duration-500"
                     referrerPolicy="no-referrer"
                     loading="lazy"

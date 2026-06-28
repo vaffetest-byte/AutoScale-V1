@@ -6,6 +6,7 @@ import Chatbot from './components/Chatbot';
 import AdminConsole from './components/AdminConsole';
 import AnalyticsTracker from './components/AnalyticsTracker';
 import SeoBlogPage from './components/SeoBlogPage';
+import { SearchSuggestions } from './components/SearchSuggestions';
 import { 
   Zap, 
   Bot, 
@@ -187,7 +188,8 @@ const Navbar = () => {
         </Link>
 
         {/* Desktop Nav */}
-        <div className="hidden md:flex items-center gap-8">
+        <div className="hidden md:flex items-center gap-6">
+          <SearchSuggestions />
           {navLinks.map((link) => (
             link.isExternal ? (
               <Link 
@@ -218,13 +220,16 @@ const Navbar = () => {
           </a>
         </div>
 
-        {/* Mobile Toggle */}
-        <button 
-          className="md:hidden text-slate-900"
-          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-        >
-          {isMobileMenuOpen ? <X /> : <Menu />}
-        </button>
+        {/* Mobile Toggle & Search */}
+        <div className="flex items-center gap-1 md:hidden">
+          <SearchSuggestions />
+          <button 
+            className="text-slate-900 p-1.5 hover:bg-slate-100 rounded-full transition-all focus:outline-none"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          >
+            {isMobileMenuOpen ? <X /> : <Menu />}
+          </button>
+        </div>
       </div>
 
       {/* Mobile Menu */}
@@ -820,13 +825,13 @@ const LogoMarquee = () => {
                 <div className="relative w-8 h-8">
                   <img 
                     src={`https://cdn.simpleicons.org/${logo.slug}/64748b`} 
-                    alt={logo.name} 
+                    alt="" 
                     className="absolute inset-0 w-full h-full opacity-40 group-hover/logo:opacity-0 transition-opacity duration-500"
                     referrerPolicy="no-referrer"
                   />
                   <img 
                     src={`https://cdn.simpleicons.org/${logo.slug}/${logo.color.replace('#', '')}`} 
-                    alt={logo.name} 
+                    alt="" 
                     className="absolute inset-0 w-full h-full opacity-0 group-hover/logo:opacity-100 transition-opacity duration-500"
                     referrerPolicy="no-referrer"
                   />
@@ -854,13 +859,13 @@ const LogoMarquee = () => {
                 <div className="relative w-8 h-8">
                   <img 
                     src={`https://cdn.simpleicons.org/${logo.slug}/64748b`} 
-                    alt={logo.name} 
+                    alt="" 
                     className="absolute inset-0 w-full h-full opacity-40 group-hover/logo:opacity-0 transition-opacity duration-500"
                     referrerPolicy="no-referrer"
                   />
                   <img 
                     src={`https://cdn.simpleicons.org/${logo.slug}/${logo.color.replace('#', '')}`} 
-                    alt={logo.name} 
+                    alt="" 
                     className="absolute inset-0 w-full h-full opacity-0 group-hover/logo:opacity-100 transition-opacity duration-500"
                     referrerPolicy="no-referrer"
                   />
